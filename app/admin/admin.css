@@ -1,0 +1,203 @@
+@font-face {
+  font-family: "Oswald CMS";
+  src: url("/archive/hosts/fonts.gstatic.com/s/oswald/v57/TK3iWkUHHAIjg752HT8Gl-1PK62t.woff2") format("woff2");
+  font-display: swap;
+}
+
+.cms-admin-root {
+  --cms-accent: #f47d48;
+  --cms-accent-dark: #d75f2c;
+  --cms-ink: #24211f;
+  --cms-muted: #746e69;
+  --cms-line: #e5ddd8;
+  --cms-soft: #fbf7f4;
+  min-height: 100vh;
+  background: #f4f0ed;
+  color: var(--cms-ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.cms-shell { min-height: 100vh; }
+.cms-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-height: 68px;
+  padding: 0 28px;
+  color: #fff;
+  background: #272321;
+  box-shadow: 0 4px 24px rgb(36 33 31 / 14%);
+}
+.cms-brand {
+  color: #fff;
+  text-decoration: none;
+  font-family: "Oswald CMS", sans-serif;
+  font-size: 22px;
+  line-height: 1;
+}
+.cms-nav { display: flex; align-items: center; gap: 4px; flex: 1; }
+.cms-nav a {
+  padding: 10px 12px;
+  border-radius: 7px;
+  color: #eee7e3;
+  text-decoration: none;
+  font-size: 14px;
+}
+.cms-nav a:hover { background: rgb(255 255 255 / 9%); color: #fff; }
+.cms-user { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+.cms-user strong { display: block; }
+.cms-user span { color: #bdb4ae; }
+.cms-link-button {
+  padding: 0;
+  border: 0;
+  color: #ffd8c7;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+}
+.cms-main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 64px; }
+.cms-page-head { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; margin-bottom: 24px; }
+.cms-page-head h1, .cms-card h2, .cms-login-card h1 {
+  margin: 0;
+  font-family: "Oswald CMS", sans-serif;
+  font-weight: 500;
+}
+.cms-page-head p { margin: 8px 0 0; color: var(--cms-muted); }
+.cms-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--cms-accent);
+  border-radius: 7px;
+  color: #fff;
+  background: var(--cms-accent);
+  text-decoration: none;
+  cursor: pointer;
+  font: 600 14px/1 inherit;
+}
+.cms-button:hover { background: var(--cms-accent-dark); border-color: var(--cms-accent-dark); }
+.cms-button.secondary { color: var(--cms-ink); background: #fff; border-color: var(--cms-line); }
+.cms-button.danger { color: #a32d25; background: #fff; border-color: #e9b8b4; }
+.cms-button.small { min-height: 34px; padding: 0 12px; font-size: 13px; }
+.cms-button[disabled] { opacity: .55; cursor: wait; }
+.cms-card {
+  border: 1px solid var(--cms-line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 28px rgb(36 33 31 / 5%);
+}
+.cms-card-body { padding: 24px; }
+.cms-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 24px; }
+.cms-stat { padding: 22px; }
+.cms-stat strong { display: block; font: 500 34px/1 "Oswald CMS", sans-serif; }
+.cms-stat span { display: block; margin-top: 8px; color: var(--cms-muted); font-size: 14px; }
+.cms-table-wrap { overflow-x: auto; }
+.cms-table { width: 100%; border-collapse: collapse; }
+.cms-table th, .cms-table td { padding: 14px 16px; border-bottom: 1px solid #eee8e4; text-align: left; vertical-align: middle; }
+.cms-table th { color: var(--cms-muted); background: var(--cms-soft); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+.cms-table tr:last-child td { border-bottom: 0; }
+.cms-table-title { color: var(--cms-ink); font-weight: 650; text-decoration: none; }
+.cms-table-title:hover { color: var(--cms-accent-dark); }
+.cms-muted { color: var(--cms-muted); font-size: 13px; }
+.cms-status { display: inline-flex; padding: 5px 9px; border-radius: 99px; font-size: 12px; font-weight: 700; }
+.cms-status.published { color: #176b38; background: #e6f5eb; }
+.cms-status.draft { color: #795611; background: #fff3d4; }
+.cms-status.archived { color: #67615d; background: #eeeae7; }
+.cms-filters { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; padding: 16px; border-bottom: 1px solid var(--cms-line); }
+.cms-field { display: grid; gap: 7px; }
+.cms-field label, .cms-field > span { font-size: 13px; font-weight: 700; }
+.cms-field small { color: var(--cms-muted); }
+.cms-input, .cms-select, .cms-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cfc6c0;
+  border-radius: 7px;
+  color: var(--cms-ink);
+  background: #fff;
+  font: inherit;
+}
+.cms-input, .cms-select { height: 44px; padding: 0 12px; }
+.cms-textarea { min-height: 112px; padding: 11px 12px; resize: vertical; }
+.cms-input:focus, .cms-select:focus, .cms-textarea:focus, .cms-editor:focus {
+  outline: 3px solid rgb(244 125 72 / 18%);
+  border-color: var(--cms-accent);
+}
+.cms-form-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+.cms-form-main, .cms-form-side { display: grid; gap: 18px; }
+.cms-form-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.cms-alert { padding: 12px 14px; border-radius: 7px; font-size: 14px; }
+.cms-alert.error { color: #8d261f; background: #fde8e6; border: 1px solid #efbbb6; }
+.cms-alert.success { color: #176b38; background: #e6f5eb; border: 1px solid #b9dfc6; }
+.cms-toolbar { display: flex; flex-wrap: wrap; gap: 5px; padding: 8px; border: 1px solid #cfc6c0; border-bottom: 0; border-radius: 7px 7px 0 0; background: var(--cms-soft); }
+.cms-toolbar button { min-width: 34px; height: 32px; border: 1px solid #d8cfca; border-radius: 5px; background: #fff; cursor: pointer; font-weight: 700; }
+.cms-editor {
+  min-height: 360px;
+  padding: 18px;
+  border: 1px solid #cfc6c0;
+  border-radius: 0 0 7px 7px;
+  background: #fff;
+  line-height: 1.65;
+}
+.cms-editor img { max-width: 100%; height: auto; }
+.cms-upload { display: grid; gap: 10px; }
+.cms-upload-preview { display: block; width: 100%; max-height: 220px; object-fit: contain; border: 1px solid var(--cms-line); border-radius: 7px; background: var(--cms-soft); }
+.cms-login { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at top, #fff8f4 0, #f2ece8 62%); }
+.cms-login-card { width: min(440px, 100%); box-sizing: border-box; padding: 36px; border: 1px solid var(--cms-line); border-radius: 14px; background: #fff; box-shadow: 0 24px 70px rgb(36 33 31 / 12%); }
+.cms-login-card h1 { font-size: 34px; }
+.cms-login-card > p { color: var(--cms-muted); line-height: 1.5; }
+.cms-login-form { display: grid; gap: 16px; margin-top: 26px; }
+.cms-login-mark { display: inline-block; margin-bottom: 16px; color: var(--cms-accent-dark); font: 500 18px "Oswald CMS", sans-serif; }
+.cms-empty { padding: 44px 24px; text-align: center; color: var(--cms-muted); }
+.cms-pagination { display: flex; justify-content: center; gap: 8px; padding: 20px; }
+.cms-inline-form { display: inline; }
+.cms-inline-controls { display: flex; align-items: center; gap: 7px; }
+.cms-input.compact, .cms-select.compact { height: 34px; min-width: 126px; padding-inline: 8px; font-size: 13px; }
+.cms-user-actions { display: flex; align-items: center; gap: 8px; }
+.cms-reset-password { position: relative; }
+.cms-reset-password summary { color: var(--cms-accent-dark); cursor: pointer; font-size: 13px; white-space: nowrap; }
+.cms-reset-password form {
+  position: absolute;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  gap: 7px;
+  width: 330px;
+  padding: 10px;
+  border: 1px solid var(--cms-line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 14px 36px rgb(36 33 31 / 16%);
+}
+.cms-two-columns { display: grid; grid-template-columns: 1fr 1.4fr; gap: 20px; align-items: start; }
+.cms-media-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.cms-media-item { min-width: 0; display: grid; gap: 7px; }
+.cms-media-item img, .cms-file-icon { width: 100%; height: 150px; object-fit: cover; border-radius: 7px; background: var(--cms-soft); }
+.cms-file-icon { display: grid; place-items: center; color: #a32d25; font: 700 28px "Oswald CMS", sans-serif; }
+.cms-media-item strong, .cms-media-item span, .cms-media-item code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cms-media-item span { color: var(--cms-muted); font-size: 12px; }
+.cms-media-item code { padding: 7px; border-radius: 4px; background: var(--cms-soft); font-size: 11px; }
+
+@media (max-width: 900px) {
+  .cms-topbar { align-items: flex-start; flex-wrap: wrap; padding: 16px 20px; gap: 12px; }
+  .cms-nav { order: 3; width: 100%; overflow-x: auto; }
+  .cms-user { margin-left: auto; }
+  .cms-form-layout, .cms-two-columns { grid-template-columns: 1fr; }
+  .cms-stats { grid-template-columns: repeat(2, 1fr); }
+  .cms-filters { grid-template-columns: 1fr 1fr; }
+  .cms-media-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 560px) {
+  .cms-main { width: min(100% - 24px, 1180px); padding-top: 24px; }
+  .cms-page-head { display: grid; }
+  .cms-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cms-stat { padding: 16px; }
+  .cms-filters { grid-template-columns: 1fr; }
+  .cms-login-card { padding: 26px 22px; }
+  .cms-media-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

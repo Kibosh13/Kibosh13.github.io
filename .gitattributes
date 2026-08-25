@@ -1,0 +1,4 @@
+public/archive/hosts/** -diff linguist-generated=true
+public/archive/pages/** -diff linguist-generated=true
+data/news-posts.json -diff linguist-generated=true
+

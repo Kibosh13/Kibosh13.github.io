@@ -1,0 +1,107 @@
+[
+  {
+    "id": 44,
+    "count": 59,
+    "name": "\"Вестники Перемен\" г. Челябинск",
+    "slug": "vestniki-peremen-g-chelyabinsk",
+    "parent": 40
+  },
+  {
+    "id": 42,
+    "count": 28,
+    "name": "«Вестники Перемен» г. Красноярск",
+    "slug": "vestniki-peremen-g-krasnoyarsk",
+    "parent": 40
+  },
+  {
+    "id": 1,
+    "count": 171,
+    "name": "Блог \"Вестники Перемен\" г. Красноярск",
+    "slug": "blog-vestniki-peremen-g-krasnoyarsk",
+    "parent": 42
+  },
+  {
+    "id": 47,
+    "count": 4,
+    "name": "Блог \"Держава Света\"",
+    "slug": "blog-derzhava-sveta",
+    "parent": 0
+  },
+  {
+    "id": 41,
+    "count": 19,
+    "name": "Блог Александра Липнягова",
+    "slug": "blog-aleksanra-lipnyagova",
+    "parent": 40
+  },
+  {
+    "id": 48,
+    "count": 15,
+    "name": "Блог для \"Начинающих\"",
+    "slug": "blog-dlya-nachinayushchih",
+    "parent": 0
+  },
+  {
+    "id": 40,
+    "count": 0,
+    "name": "Блоги",
+    "slug": "blog",
+    "parent": 0
+  },
+  {
+    "id": 38,
+    "count": 1,
+    "name": "Картинки",
+    "slug": "kartinki",
+    "parent": 26
+  },
+  {
+    "id": 58,
+    "count": 1,
+    "name": "книги",
+    "slug": "book",
+    "parent": 0
+  },
+  {
+    "id": 43,
+    "count": 6,
+    "name": "Мероприятия",
+    "slug": "meropriyatiya",
+    "parent": 0
+  },
+  {
+    "id": 25,
+    "count": 469,
+    "name": "Новости",
+    "slug": "news",
+    "parent": 0
+  },
+  {
+    "id": 37,
+    "count": 294,
+    "name": "Песни",
+    "slug": "pesni",
+    "parent": 26
+  },
+  {
+    "id": 39,
+    "count": 12,
+    "name": "Прочее",
+    "slug": "prochee",
+    "parent": 26
+  },
+  {
+    "id": 36,
+    "count": 56,
+    "name": "Стихи",
+    "slug": "stihi",
+    "parent": 26
+  },
+  {
+    "id": 26,
+    "count": 263,
+    "name": "Творчество",
+    "slug": "creation",
+    "parent": 0
+  }
+]
