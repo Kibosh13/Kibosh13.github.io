@@ -9,6 +9,46 @@
     overflow: hidden !important;
   }
 
+  .elementor-830 .elementor-element.elementor-element-e939412 > .elementor-container {
+    display: flex !important;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 12px;
+  }
+
+  .elementor-830 .elementor-element.elementor-element-6f3fd16 {
+    width: auto !important;
+    min-width: 0;
+    flex: 1 1 auto !important;
+  }
+
+  .elementor-830 .elementor-element.elementor-element-860e61a {
+    width: 58px !important;
+    min-width: 58px;
+    flex: 0 0 58px !important;
+  }
+
+  .elementor-830 .elementor-element.elementor-element-e1db6d1 {
+    display: none !important;
+  }
+
+  .elementor-830 .elementor-element.elementor-element-6f3fd16 > .elementor-widget-wrap,
+  .elementor-830 .elementor-element.elementor-element-860e61a > .elementor-widget-wrap {
+    padding: 0 !important;
+  }
+
+  .elementor-830 .elementor-element.elementor-element-0358863 {
+    text-align: left !important;
+  }
+
+  .elementor-830 .elementor-element.elementor-element-0358863 .elementor-heading-title {
+    font-size: clamp(24px, 7vw, 32px) !important;
+    line-height: 1.05 !important;
+  }
+
   .archive-mobile-menu-source .elementor-nav-menu--main,
   .archive-mobile-menu-source > .elementor-widget-container > .elementor-menu-toggle,
   .archive-mobile-menu-source > .elementor-widget-container > .elementor-nav-menu--dropdown {
@@ -18,7 +58,7 @@
   .archive-mobile-menu-source > .elementor-widget-container {
     display: flex !important;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
   }
 
   .archive-mobile-menu-trigger {

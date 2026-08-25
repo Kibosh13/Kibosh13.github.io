@@ -67,7 +67,7 @@ function(i,o){"use strict";r=function(t){return function(t,e){var i=t.jQuery,n=t
   var style=document.createElement("link");
   style.id="archive-mobile-menu-styles";
   style.rel="stylesheet";
-  style.href="/archive/mobile-menu.css?v=20260825-06";
+  style.href="/archive/mobile-menu.css?v=20260825-07";
   document.head.appendChild(style);
   var script=document.createElement("script");
   script.id="archive-mobile-menu-loader";
