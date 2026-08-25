@@ -134,6 +134,7 @@ def write_search_page(output: Path) -> None:
 
 
 def write_support_files(output: Path) -> None:
+    output.joinpath(".nojekyll").touch()
     output.joinpath("404.html").write_text(
         """<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Страница не найдена</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:12vh 24px;color:#171717}h1{font-size:clamp(40px,8vw,80px)}a{color:#d94f33;font-size:20px}</style></head><body><h1>404</h1><p>Такой страницы нет в сохранённом архиве.</p><p><a href="/">Вернуться на главную</a></p></body></html>""",
         encoding="utf-8",
@@ -172,4 +173,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
