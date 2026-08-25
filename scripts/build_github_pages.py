@@ -153,6 +153,8 @@ def build(output: Path) -> None:
 
     shutil.copytree(pages, output, dirs_exist_ok=True)
     shutil.copytree(hosts, output / "archive" / "hosts", dirs_exist_ok=True)
+    for shared_asset in ("mobile-menu.css", "mobile-menu.js"):
+        shutil.copy2(archive_root / shared_asset, output / "archive" / shared_asset)
 
     social_image = PROJECT_ROOT / "public" / "og.png"
     if social_image.exists():
