@@ -34,7 +34,10 @@ body { color: #231f1d; background: #fbf8f6; }
 .site-menu-toggle,
 .site-mobile-menu-layer { display: none; }
 .site-content { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 64px 0 80px; }
-.site-footer { padding: 28px 20px; color: #6f6761; background: #f2ece8; text-align: center; }
+.site-footer { padding: 28px 20px; color: #6f6761; background: #f2ece8; }
+.site-footer-inner { display: flex; align-items: center; justify-content: center; gap: 16px; text-align: center; }
+.site-liveinternet-counter { display: inline-flex; flex: 0 0 auto; line-height: 0; }
+.site-liveinternet-counter img { display: block; width: 88px; height: 31px; border: 0; }
 .site-category-head { margin-bottom: 36px; padding: 42px; background: #f0eeed; }
 .site-category-head span { color: #ef7744; text-transform: uppercase; letter-spacing: .12em; font-size: 13px; }
 .site-category-head h1 { margin: 8px 0 0; font-size: clamp(42px, 7vw, 78px); font-weight: 500; line-height: 1; }
