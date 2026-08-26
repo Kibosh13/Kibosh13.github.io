@@ -70,6 +70,30 @@ docker compose up -d --build
 
 Приложение будет доступно на порту 3000. Перед ним следует настроить HTTPS-прокси (например, Caddy или Nginx). База и загрузки находятся в постоянном Docker-томе `cms-data` и сохраняются при пересборке контейнера.
 
+## Развёртывание на Beget
+
+Рабочая версия запущена на виртуальном хостинге Beget через Apache `mod_passenger`. Конфигурация Passenger лежит в `deploy/beget/.htaccess`.
+
+На хостинге используется Node.js 22 из `~/.local`. В файловом менеджере Beget для каталога `.local` должен быть включён общий доступ «Чтение и запись» с применением ко вложенным папкам. Без этого изолированный веб-процесс не сможет запустить Node.js.
+
+Серверная сборка размещается в каталоге `app`. После копирования `.next/standalone`, `.next/static`, `public` и `storage` нужно установить Linux-зависимости и восстановить служебные ссылки standalone-сборки:
+
+```bash
+cd app
+PYTHON="$PWD/../../.local/bin/python3" npm ci --omit=dev
+mkdir -p .next/node_modules
+ln -s ../../node_modules/better-sqlite3 .next/node_modules/better-sqlite3-90e2652d1716b047
+ln -s ../../node_modules/postcss .next/node_modules/postcss-9745a0d11e3197ae
+```
+
+Каталог `public_html` должен ссылаться на `app/public`, а после обновления сайта Passenger перезапускается командой:
+
+```bash
+touch app/tmp/restart.txt
+```
+
+База `storage/cms.sqlite` и каталог `storage/uploads` — изменяемые данные. Их нельзя заменять пустыми файлами из новой сборки; перед обновлением их следует резервировать.
+
 ## Демонстрация на GitHub Pages
 
 Ветка `gh-pages` публикует доступную только для чтения копию архива. Она включает все восстановленные страницы, локальные медиа и поиск по сохранённым материалам. GitHub Pages не запускает Node.js, SQLite и административную часть — полноценная CMS разворачивается через Docker.

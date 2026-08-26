@@ -1,0 +1,13 @@
+PassengerNodejs /home/a/afina5da/.local/bin/node
+PassengerAppRoot /home/a/afina5da/afina5da.beget.tech/app
+PassengerAppType node
+PassengerStartupFile server.js
+
+SetEnv NODE_ENV production
+SetEnv NEXT_TELEMETRY_DISABLED 1
+SetEnv HOSTNAME 0.0.0.0
+SetEnv CMS_DATA_DIR /home/a/afina5da/afina5da.beget.tech/app/storage
+SetEnv CMS_IMPORT_NEWS false
+SetEnv SITE_URL https://xn----7sbbbtcagtc7biimpdj.xn--p1ai
+
+Options -Indexes
