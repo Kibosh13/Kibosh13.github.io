@@ -31,11 +31,22 @@ function hroniki_import_json(string $path): array
 
 function hroniki_import_branding(string $text): string
 {
-    return str_replace(
-        ['ВЕСТНИКИ ПЕРЕМЕН', 'ВЕСТНИКИ перемен', 'Вестники Перемен', 'Вестники перемен', 'вестники перемен'],
-        ['ХРОНИКИ ПРЕОБРАЖЕНИЯ МИРА', 'ХРОНИКИ ПРЕОБРАЖЕНИЯ МИРА', 'Хроники преображения Мира', 'Хроники преображения Мира', 'хроники преображения Мира'],
-        $text
-    );
+    $separator = '(?:[\s\x{00A0}\-–—]|&nbsp;)+';
+    $patterns = [
+        '~ВЕСТНИКАМИ' . $separator . 'ПЕРЕМЕН~u' => 'ХРОНИКАМИ ПРЕОБРАЖЕНИЯ МИРА',
+        '~ВЕСТНИКАХ' . $separator . 'ПЕРЕМЕН~u' => 'ХРОНИКАХ ПРЕОБРАЖЕНИЯ МИРА',
+        '~ВЕСТНИКОВ' . $separator . 'ПЕРЕМЕН~u' => 'ХРОНИК ПРЕОБРАЖЕНИЯ МИРА',
+        '~ВЕСТНИКАМ' . $separator . 'ПЕРЕМЕН~u' => 'ХРОНИКАМ ПРЕОБРАЖЕНИЯ МИРА',
+        '~ВЕСТНИКИ' . $separator . 'ПЕРЕМЕН~u' => 'ХРОНИКИ ПРЕОБРАЖЕНИЯ МИРА',
+        '~ВЕСТНИК' . $separator . 'ПЕРЕМЕН~u' => 'ХРОНИКИ ПРЕОБРАЖЕНИЯ МИРА',
+        '~Вестниками' . $separator . 'Перемен~iu' => 'Хрониками преображения Мира',
+        '~Вестниках' . $separator . 'Перемен~iu' => 'Хрониках преображения Мира',
+        '~Вестников' . $separator . 'Перемен~iu' => 'Хроник преображения Мира',
+        '~Вестникам' . $separator . 'Перемен~iu' => 'Хроникам преображения Мира',
+        '~Вестники' . $separator . 'Перемен~iu' => 'Хроники преображения Мира',
+        '~Вестник' . $separator . 'Перемен~iu' => 'Хроники преображения Мира',
+    ];
+    return preg_replace(array_keys($patterns), array_values($patterns), $text) ?? $text;
 }
 
 function hroniki_import_localize(string $html, string $old_origin, string $legacy_host): string
@@ -58,6 +69,8 @@ function hroniki_import_localize(string $html, string $old_origin, string $legac
         'https://sun9-north.userapi.com/sun9-85/' => 'https://sun9-85.userapi.com/',
         $old_origin . '/' => home_url('/'),
         'http://xn----ctbjbaararyeivphq.xn--p1ai/' => home_url('/'),
+        'https://вестники-перемен.рф/' => home_url('/'),
+        'http://вестники-перемен.рф/' => home_url('/'),
     ];
     return hroniki_import_branding(strtr($html, $replacements));
 }

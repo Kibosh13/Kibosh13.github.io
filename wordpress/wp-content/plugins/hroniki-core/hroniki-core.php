@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Хроники — управление сайтом
  * Description: Книги, загрузка файлов и настройки сайта «Хроники преображения Мира».
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Хроники преображения Мира
  */
 
@@ -138,6 +138,84 @@ function hroniki_upload_mimes(array $mimes): array
 }
 add_filter('upload_mimes', 'hroniki_upload_mimes');
 
+function hroniki_video_box(WP_Post $post): void
+{
+    $video_page = get_page_by_path('video');
+    if (!$video_page instanceof WP_Post || $post->ID !== $video_page->ID) {
+        return;
+    }
+    add_meta_box(
+        'hroniki-video-list',
+        'Видеоролики',
+        'hroniki_render_video_box',
+        'page',
+        'normal',
+        'high',
+        ['__block_editor_compatible_meta_box' => true]
+    );
+}
+add_action('add_meta_boxes_page', 'hroniki_video_box');
+
+function hroniki_render_video_box(WP_Post $post): void
+{
+    $video_page = get_page_by_path('video');
+    if (!$video_page instanceof WP_Post || $post->ID !== $video_page->ID) {
+        echo '<p>Этот блок используется только на странице «Видео».</p>';
+        return;
+    }
+    wp_nonce_field('hroniki_save_videos', 'hroniki_videos_nonce');
+    $videos = get_post_meta($post->ID, '_hroniki_videos', true);
+    $lines = [];
+    foreach (is_array($videos) ? $videos : [] as $video) {
+        $lines[] = implode(' | ', [
+            str_replace('|', '—', (string) ($video['title'] ?? '')),
+            (string) ($video['url'] ?? ''),
+            (string) ($video['thumbnail'] ?? ''),
+        ]);
+    }
+    ?>
+    <p>Один ролик на строку: <strong>название | ссылка YouTube | ссылка картинки</strong>. Строки можно добавлять, удалять и переставлять.</p>
+    <textarea class="widefat code" rows="16" name="hroniki_videos_list"><?php echo esc_textarea(implode("\n", $lines)); ?></textarea>
+    <?php
+}
+
+function hroniki_save_videos(int $post_id): void
+{
+    if (
+        !isset($_POST['hroniki_videos_nonce']) ||
+        !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['hroniki_videos_nonce'])), 'hroniki_save_videos') ||
+        (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) ||
+        !current_user_can('edit_post', $post_id)
+    ) {
+        return;
+    }
+    $raw = isset($_POST['hroniki_videos_list']) ? (string) wp_unslash($_POST['hroniki_videos_list']) : '';
+    $videos = [];
+    foreach (preg_split('/\R/u', $raw) ?: [] as $line) {
+        if (trim($line) === '') {
+            continue;
+        }
+        [$title, $url, $thumbnail] = array_pad(array_map('trim', explode('|', $line, 3)), 3, '');
+        $url = esc_url_raw($url);
+        $thumbnail = esc_url_raw($thumbnail);
+        if ($title !== '' && $url !== '') {
+            $videos[] = [
+                'title' => sanitize_text_field($title),
+                'url' => $url,
+                'thumbnail' => $thumbnail,
+            ];
+        }
+    }
+    update_post_meta($post_id, '_hroniki_videos', $videos);
+}
+add_action('save_post_page', 'hroniki_save_videos');
+
+function hroniki_sanitize_book_ids($value): array
+{
+    $ids = is_array($value) ? array_map('absint', $value) : [];
+    return array_slice(array_values(array_unique(array_filter($ids))), 0, 6);
+}
+
 function hroniki_register_settings(): void
 {
     register_setting('hroniki_site', 'hroniki_footer_text', [
@@ -154,6 +232,16 @@ function hroniki_register_settings(): void
         'type' => 'integer',
         'sanitize_callback' => static fn($value) => min(12, max(3, absint($value))),
         'default' => 6,
+    ]);
+    register_setting('hroniki_site', 'hroniki_recent_posts_count', [
+        'type' => 'integer',
+        'sanitize_callback' => static fn($value) => min(20, max(1, absint($value))),
+        'default' => 10,
+    ]);
+    register_setting('hroniki_site', 'hroniki_home_book_ids', [
+        'type' => 'array',
+        'sanitize_callback' => 'hroniki_sanitize_book_ids',
+        'default' => [],
     ]);
     foreach (['hroniki_home_first_image_url', 'hroniki_home_second_image_url', 'hroniki_home_video_image_url'] as $option_name) {
         register_setting('hroniki_site', $option_name, [
@@ -173,6 +261,16 @@ function hroniki_register_settings(): void
         'type' => 'string',
         'sanitize_callback' => 'sanitize_textarea_field',
         'default' => '',
+    ]);
+    register_setting('hroniki_site', 'hroniki_sidebar_title', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+        'default' => 'Знаки ММ и ЙОРА-за Благотворительный взнос:',
+    ]);
+    register_setting('hroniki_site', 'hroniki_sidebar_text', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_textarea_field',
+        'default' => "адрес vladar53@list.ru\nтел. 8 929 356 12 78",
     ]);
 }
 add_action('admin_init', 'hroniki_register_settings');
@@ -195,6 +293,9 @@ function hroniki_render_settings_page(): void
         return;
     }
     $front_page_id = (int) get_option('page_on_front');
+    $video_page = get_page_by_path('video');
+    $selected_book_ids = hroniki_sanitize_book_ids(get_option('hroniki_home_book_ids', []));
+    $all_books = get_posts(['post_type' => 'book', 'post_status' => 'publish', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC']);
     ?>
     <div class="wrap">
         <h1>Настройки сайта</h1>
@@ -202,6 +303,14 @@ function hroniki_render_settings_page(): void
         <?php if ($front_page_id) : ?>
             <p><a class="button button-primary" href="<?php echo esc_url(get_edit_post_link($front_page_id)); ?>">Редактировать главную</a></p>
         <?php endif; ?>
+        <p>
+            <a class="button" href="<?php echo esc_url(admin_url('edit.php')); ?>">Публикации</a>
+            <a class="button" href="<?php echo esc_url(admin_url('edit-tags.php?taxonomy=category')); ?>">Категории</a>
+            <a class="button" href="<?php echo esc_url(admin_url('edit.php?post_type=book')); ?>">Книги</a>
+            <?php if ($video_page instanceof WP_Post) : ?><a class="button" href="<?php echo esc_url(get_edit_post_link($video_page)); ?>">Видеоролики</a><?php endif; ?>
+            <a class="button" href="<?php echo esc_url(admin_url('nav-menus.php')); ?>">Меню</a>
+            <a class="button" href="<?php echo esc_url(admin_url('widgets.php')); ?>">Боковая колонка</a>
+        </p>
         <form method="post" action="options.php">
             <?php settings_fields('hroniki_site'); ?>
             <table class="form-table" role="presentation">
@@ -219,7 +328,7 @@ function hroniki_render_settings_page(): void
                 </tr>
                 <tr>
                     <th scope="row"><label for="hroniki_home_first_image_url">Первая картинка главной</label></th>
-                    <td><input class="large-text" type="url" id="hroniki_home_first_image_url" name="hroniki_home_first_image_url" value="<?php echo esc_attr((string) get_option('hroniki_home_first_image_url')); ?>" placeholder="Оставьте пустым для исходной картинки"></td>
+                    <td><input class="large-text" type="url" id="hroniki_home_first_image_url" name="hroniki_home_first_image_url" value="<?php echo esc_attr((string) get_option('hroniki_home_first_image_url')); ?>" placeholder="Оставьте пустым для исходной картинки"> <button class="button hroniki-media-select" type="button" data-target="hroniki_home_first_image_url">Выбрать из медиатеки</button></td>
                 </tr>
                 <tr>
                     <th scope="row"><label for="hroniki_home_second_title">Заголовок второго блока</label></th>
@@ -231,7 +340,7 @@ function hroniki_render_settings_page(): void
                 </tr>
                 <tr>
                     <th scope="row"><label for="hroniki_home_second_image_url">Вторая картинка главной</label></th>
-                    <td><input class="large-text" type="url" id="hroniki_home_second_image_url" name="hroniki_home_second_image_url" value="<?php echo esc_attr((string) get_option('hroniki_home_second_image_url')); ?>" placeholder="Оставьте пустым для исходной картинки"></td>
+                    <td><input class="large-text" type="url" id="hroniki_home_second_image_url" name="hroniki_home_second_image_url" value="<?php echo esc_attr((string) get_option('hroniki_home_second_image_url')); ?>" placeholder="Оставьте пустым для исходной картинки"> <button class="button hroniki-media-select" type="button" data-target="hroniki_home_second_image_url">Выбрать из медиатеки</button></td>
                 </tr>
                 <tr>
                     <th scope="row"><label for="hroniki_home_publications_title">Заголовок публикаций</label></th>
@@ -242,12 +351,33 @@ function hroniki_render_settings_page(): void
                     <td><input class="large-text" id="hroniki_home_books_title" name="hroniki_home_books_title" value="<?php echo esc_attr((string) get_option('hroniki_home_books_title')); ?>" placeholder="Книги Ирины Ниловой"></td>
                 </tr>
                 <tr>
+                    <th scope="row"><label for="hroniki_home_book_ids">Книги в карусели</label></th>
+                    <td>
+                        <select class="regular-text" id="hroniki_home_book_ids" name="hroniki_home_book_ids[]" multiple size="8">
+                            <?php foreach ($all_books as $book) : ?><option value="<?php echo esc_attr((string) $book->ID); ?>" <?php selected(in_array($book->ID, $selected_book_ids, true)); ?>><?php echo esc_html($book->post_title); ?></option><?php endforeach; ?>
+                        </select>
+                        <p class="description">Выберите до шести книг с Ctrl/Cmd. Если ничего не выбрано, сохраняются исходные обложки.</p>
+                    </td>
+                </tr>
+                <tr>
                     <th scope="row"><label for="hroniki_home_video_title">Заголовок видео</label></th>
                     <td><input class="large-text" id="hroniki_home_video_title" name="hroniki_home_video_title" value="<?php echo esc_attr((string) get_option('hroniki_home_video_title')); ?>" placeholder="Видео"></td>
                 </tr>
                 <tr>
                     <th scope="row"><label for="hroniki_home_video_image_url">Картинка блока видео</label></th>
-                    <td><input class="large-text" type="url" id="hroniki_home_video_image_url" name="hroniki_home_video_image_url" value="<?php echo esc_attr((string) get_option('hroniki_home_video_image_url')); ?>" placeholder="Оставьте пустым для исходной картинки"></td>
+                    <td><input class="large-text" type="url" id="hroniki_home_video_image_url" name="hroniki_home_video_image_url" value="<?php echo esc_attr((string) get_option('hroniki_home_video_image_url')); ?>" placeholder="Оставьте пустым для исходной картинки"> <button class="button hroniki-media-select" type="button" data-target="hroniki_home_video_image_url">Выбрать из медиатеки</button></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_recent_posts_count">Записей в боковой колонке</label></th>
+                    <td><input type="number" min="1" max="20" id="hroniki_recent_posts_count" name="hroniki_recent_posts_count" value="<?php echo esc_attr((string) get_option('hroniki_recent_posts_count', 10)); ?>"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_sidebar_title">Заголовок блока пожертвований</label></th>
+                    <td><input class="large-text" id="hroniki_sidebar_title" name="hroniki_sidebar_title" value="<?php echo esc_attr((string) get_option('hroniki_sidebar_title', 'Знаки ММ и ЙОРА-за Благотворительный взнос:')); ?>"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_sidebar_text">Текст блока пожертвований</label></th>
+                    <td><textarea class="large-text" rows="4" id="hroniki_sidebar_text" name="hroniki_sidebar_text"><?php echo esc_textarea((string) get_option('hroniki_sidebar_text', "адрес vladar53@list.ru\nтел. 8 929 356 12 78")); ?></textarea></td>
                 </tr>
             </table>
             <?php submit_button(); ?>
@@ -265,14 +395,35 @@ add_action('wp_dashboard_setup', 'hroniki_dashboard_widget');
 function hroniki_dashboard_widget_content(): void
 {
     $front_page_id = (int) get_option('page_on_front');
+    $video_page = get_page_by_path('video');
     echo '<p>Быстрый доступ к основным разделам:</p><p>';
     echo '<a class="button button-primary" href="' . esc_url(admin_url('post-new.php')) . '">Добавить новость</a> ';
     echo '<a class="button" href="' . esc_url(admin_url('post-new.php?post_type=book')) . '">Добавить книгу</a> ';
     if ($front_page_id) {
-        echo '<a class="button" href="' . esc_url(get_edit_post_link($front_page_id)) . '">Изменить главную</a>';
+        echo '<a class="button" href="' . esc_url(get_edit_post_link($front_page_id)) . '">Изменить главную</a> ';
     }
+    if ($video_page instanceof WP_Post) {
+        echo '<a class="button" href="' . esc_url(get_edit_post_link($video_page)) . '">Изменить видео</a> ';
+    }
+    echo '<a class="button" href="' . esc_url(admin_url('themes.php?page=hroniki-site-settings')) . '">Настройки сайта</a>';
     echo '</p>';
 }
+
+function hroniki_settings_admin_assets(string $hook): void
+{
+    if ($hook !== 'appearance_page_hroniki-site-settings') {
+        return;
+    }
+    wp_enqueue_media();
+    wp_enqueue_script(
+        'hroniki-settings-admin',
+        plugins_url('settings-admin.js', __FILE__),
+        ['jquery'],
+        '1.0.0',
+        true
+    );
+}
+add_action('admin_enqueue_scripts', 'hroniki_settings_admin_assets');
 
 function hroniki_admin_post_columns(array $columns): array
 {

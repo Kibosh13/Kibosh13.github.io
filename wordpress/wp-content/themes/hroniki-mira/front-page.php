@@ -9,6 +9,14 @@ $home_book_covers = [
     '20220127_133738-195x300.jpg',
     '20220127_133728-195x300.jpg',
 ];
+$home_book_ids = array_slice(array_values(array_filter(array_map('absint', (array) get_option('hroniki_home_book_ids', [])))), 0, 6);
+$home_selected_books = $home_book_ids ? get_posts([
+    'post_type' => 'book',
+    'post_status' => 'publish',
+    'post__in' => $home_book_ids,
+    'orderby' => 'post__in',
+    'numberposts' => 6,
+]) : [];
 $home_first_image = (string) get_option('hroniki_home_first_image_url') ?: $legacy_uploads . '11211.jpg';
 $home_second_image = (string) get_option('hroniki_home_second_image_url') ?: $legacy_uploads . '11311.jpg';
 $home_second_title = (string) get_option('hroniki_home_second_title') ?: 'О задачах общественного движения «Хроники преображения Мира»';
@@ -77,11 +85,19 @@ $home_video_image = (string) get_option('hroniki_home_video_image_url') ?: $lega
         <div class="source-carousel" data-home-carousel>
             <button class="source-carousel-arrow is-prev" type="button" data-carousel-prev aria-label="Предыдущие книги">‹</button>
             <div class="source-carousel-track" data-carousel-track>
-                <?php foreach ($home_book_covers as $index => $cover) : ?>
-                    <a class="source-carousel-slide" href="<?php echo esc_url(get_post_type_archive_link('book')); ?>">
-                        <img src="<?php echo esc_url($legacy_uploads . $cover); ?>" alt="Книга Ирины Ниловой <?php echo esc_attr((string) ($index + 1)); ?>" loading="lazy">
-                    </a>
-                <?php endforeach; ?>
+                <?php if ($home_selected_books) : ?>
+                    <?php foreach ($home_selected_books as $book) : $cover = hroniki_first_image_url($book); ?>
+                        <a class="source-carousel-slide" href="<?php echo esc_url(get_permalink($book)); ?>">
+                            <?php if ($cover) : ?><img src="<?php echo esc_url($cover); ?>" alt="<?php echo esc_attr($book->post_title); ?>" loading="lazy"><?php endif; ?>
+                        </a>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <?php foreach ($home_book_covers as $index => $cover) : ?>
+                        <a class="source-carousel-slide" href="<?php echo esc_url(get_post_type_archive_link('book')); ?>">
+                            <img src="<?php echo esc_url($legacy_uploads . $cover); ?>" alt="Книга Ирины Ниловой <?php echo esc_attr((string) ($index + 1)); ?>" loading="lazy">
+                        </a>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
             <button class="source-carousel-arrow is-next" type="button" data-carousel-next aria-label="Следующие книги">›</button>
         </div>

@@ -3,7 +3,7 @@ Theme Name: Хроники преображения Мира
 Theme URI: https://преображение-мира.рф/
 Author: Хроники преображения Мира
 Description: Самостоятельная тема восстановленного авторского сайта Ирины Ниловой.
-Version: 1.1.0
+Version: 1.2.0
 Text Domain: hroniki-mira
 */
 
@@ -26,9 +26,10 @@ Text Domain: hroniki-mira
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { overflow-x: hidden; scroll-behavior: smooth; }
 body {
   margin: 0;
+  overflow-x: hidden;
   color: var(--ink);
   background: var(--paper);
   font-family: Arial, sans-serif;
@@ -75,6 +76,8 @@ a { color: var(--orange-deep); }
   text-decoration: none;
 }
 .site-description { margin: 8px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
+.custom-logo-link { display: block; text-align: center; }
+.custom-logo { display: inline-block; width: auto; max-width: 220px; height: auto; max-height: 86px; }
 .desktop-navigation ul { display: flex; margin: 0; padding: 0; align-items: center; list-style: none; }
 .desktop-navigation > ul { justify-content: center; }
 .desktop-navigation li { position: relative; }
@@ -469,7 +472,7 @@ body {
 .source-publication-date { margin: 7px 0 12px; color: #575250; font-size: 16px; line-height: 1.75; }
 .source-publication-excerpt { color: #000; font-size: 18px; line-height: 1.7; }
 .source-home-books { position: relative; }
-.source-carousel { position: relative; padding-inline: 38px; }
+.source-carousel { position: relative; overflow: hidden; padding-inline: 38px; }
 .source-carousel-track {
   display: grid;
   padding: 0;
@@ -556,6 +559,8 @@ body {
 .source-sidebar-widget a { display: inline; color: #575250; text-decoration: none; }
 .source-sidebar-widget a:hover { color: #ff5100; }
 .source-sidebar-widget time { display: inline; margin-left: 4px; color: #575250; }
+.source-sidebar-donation { margin-top: 26px; padding-top: 30px; background: #fff; }
+.source-sidebar-donation p { margin: 0; color: #575250; font-size: 18px; line-height: 2; }
 .source-content-layout.is-single { margin-top: 72px; }
 .source-single-post { padding: 96px 120px; background: #fff; }
 .source-single-header { margin-bottom: 38px; }
@@ -577,12 +582,21 @@ body {
 .source-library-content .book-cover { aspect-ratio: 3 / 4; border: 0; background: transparent; box-shadow: none; }
 .source-library-content .book-card h2 { margin-top: 20px; font-size: 24px; text-align: center; }
 .source-library-content .book-card h2 a { color: #575250; }
-.source-book-shell { max-width: 1000px; padding: 54px 20px 70px; }
 .source-book-article { background: #fff; }
-.source-book-article > h1 { margin: 0 0 32px; color: #1e1810; font: 400 30px/1.25 "Oswald Hroniki", sans-serif; text-align: center; }
-.source-book-article .book-detail { grid-template-columns: 240px minmax(0, 1fr); align-items: start; gap: 36px; }
-.source-book-article .book-cover { position: static; aspect-ratio: 3 / 4; border: 0; box-shadow: none; }
-.source-book-article .article-content { color: #575250; font-size: 18px; line-height: 1.95; }
+.source-book-article > h1 { margin: 0 0 36px; color: #1e1810; font: 400 30px/1.2 "Oswald Hroniki", sans-serif; }
+.source-book-article .book-detail { grid-template-columns: 34% 60%; align-items: start; gap: 6%; }
+.source-book-article .book-cover { position: static; aspect-ratio: auto; border: 0; box-shadow: none; }
+.source-book-article .book-cover img { display: block; width: 100%; height: auto; object-fit: initial; }
+.source-book-article .article-content { color: #575250; font-size: 18px; line-height: 1.857; }
+.source-book-article .article-content p { margin: 0 0 1.6em; }
+.source-book-article .mbm-book-excerpt-label { display: block; padding: 15px 0; font-size: 21.6px; font-weight: 700; line-height: 1.857; }
+.source-book-article .mbm-book-excerpt-text { display: block; }
+.source-book-article .mbm-book-excerpt-text-hidden { display: none; }
+.source-book-article .mbm-book-excerpt-text-hidden.is-expanded { display: inline; }
+.source-book-article .mbm-book-excerpt-read-more { color: #575250; cursor: pointer; text-decoration: underline; }
+.source-book-article .mbm-book-excerpt-read-more:hover,
+.source-book-article .mbm-book-excerpt-read-more:focus { color: #ff5100; }
+.source-book-article .mbm-book-excerpt-read-more[hidden] { display: none; }
 .source-download-label { margin: 8px 0 10px; color: #575250; font: 600 22px/1.3 "Oswald Hroniki", sans-serif; }
 .source-book-article .book-file-button { min-width: 0; width: 100%; margin-top: 0; padding-inline: 12px; }
 .source-video-content { padding: 0 40px 60px; background: #f8f5f4; }
@@ -680,7 +694,6 @@ body {
   .source-library-content { padding: 60px 12px 35px; }
   .source-library-content .book-grid { gap: 38px 14px; }
   .source-library-content .book-card h2 { font-size: 20px; }
-  .source-book-shell { padding: 34px 12px 50px; }
   .source-book-article .book-detail { grid-template-columns: 1fr; }
   .source-book-cover-column { width: min(100%, 340px); margin-inline: auto; }
   .source-book-article .article-content { font-size: 16px; }

@@ -10,11 +10,31 @@ function hroniki_theme_setup(): void
     add_theme_support('post-thumbnails');
     add_theme_support('responsive-embeds');
     add_theme_support('align-wide');
+    add_theme_support('custom-logo', [
+        'height' => 100,
+        'width' => 260,
+        'flex-height' => true,
+        'flex-width' => true,
+    ]);
     add_theme_support('html5', ['search-form', 'gallery', 'caption', 'style', 'script']);
     register_nav_menus(['primary' => 'Основное меню']);
     set_post_thumbnail_size(720, 480, true);
 }
 add_action('after_setup_theme', 'hroniki_theme_setup');
+
+function hroniki_widgets_init(): void
+{
+    register_sidebar([
+        'name' => 'Боковая колонка',
+        'id' => 'sidebar-main',
+        'description' => 'Дополнительные блоки под последними записями.',
+        'before_widget' => '<section id="%1$s" class="source-sidebar-widget widget %2$s">',
+        'after_widget' => '</section>',
+        'before_title' => '<h2>',
+        'after_title' => '</h2>',
+    ]);
+}
+add_action('widgets_init', 'hroniki_widgets_init');
 
 function hroniki_theme_assets(): void
 {

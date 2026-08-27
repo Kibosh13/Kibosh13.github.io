@@ -76,4 +76,28 @@
       if (!grid.querySelector('.video-card.is-hidden')) button.hidden = true;
     });
   });
+
+  document.querySelectorAll('.mbm-book-excerpt-read-more').forEach(function (button, index) {
+    var content = button.parentElement.querySelector('.mbm-book-excerpt-text-hidden');
+    if (!content) return;
+    content.id = content.id || 'book-excerpt-hidden-' + index;
+    button.setAttribute('role', 'button');
+    button.setAttribute('tabindex', '0');
+    button.setAttribute('aria-controls', content.id);
+    button.setAttribute('aria-expanded', 'false');
+
+    function expand() {
+      content.classList.add('is-expanded');
+      button.setAttribute('aria-expanded', 'true');
+      button.hidden = true;
+    }
+
+    button.addEventListener('click', expand);
+    button.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        expand();
+      }
+    });
+  });
 })();

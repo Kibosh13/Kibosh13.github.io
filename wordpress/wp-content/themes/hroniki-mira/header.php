@@ -11,7 +11,11 @@
 <header class="site-header">
     <div class="wrap header-inner">
         <div class="site-branding">
-            <a class="site-title" href="<?php echo esc_url(home_url('/')); ?>"><?php bloginfo('name'); ?></a>
+            <?php if (has_custom_logo()) : ?>
+                <?php the_custom_logo(); ?>
+            <?php else : ?>
+                <a class="site-title" href="<?php echo esc_url(home_url('/')); ?>"><?php bloginfo('name'); ?></a>
+            <?php endif; ?>
             <?php if (get_bloginfo('description')) : ?><p class="site-description"><?php bloginfo('description'); ?></p><?php endif; ?>
         </div>
         <nav class="desktop-navigation" aria-label="Основное меню">
@@ -35,4 +39,3 @@
     </div>
 </div>
 <main class="site-main" id="content">
-
