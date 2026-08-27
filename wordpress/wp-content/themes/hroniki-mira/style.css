@@ -3,7 +3,7 @@ Theme Name: Хроники преображения Мира
 Theme URI: https://преображение-мира.рф/
 Author: Хроники преображения Мира
 Description: Самостоятельная тема восстановленного авторского сайта Ирины Ниловой.
-Version: 1.0.0
+Version: 1.1.0
 Text Domain: hroniki-mira
 */
 
@@ -22,7 +22,7 @@ Text Domain: hroniki-mira
   --panel: #ffffff;
   --line: #e8ddd7;
   --soft: #f3ece8;
-  --content: 1180px;
+  --content: 1200px;
 }
 
 * { box-sizing: border-box; }
@@ -391,3 +391,304 @@ a { color: var(--orange-deep); }
   *, *::before, *::after { transition: none !important; }
 }
 
+/* Source-site layout. The approved rebuilt header and mobile menu stay intact. */
+body {
+  color: #575250;
+  background: #f8f5f4;
+  font-family: "Oswald Hroniki", Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.65;
+}
+.site-main { min-height: 62vh; background: #f8f5f4; }
+.site-footer { padding: 18px 0; border: 2px solid var(--orange); color: #575250; background: #fff; }
+.source-button {
+  display: inline-flex;
+  min-width: 196px;
+  min-height: 48px;
+  padding: 13px 34px;
+  border: 0;
+  border-radius: 9px;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: #ff7a3d;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .42);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.source-button:hover,
+.source-button:focus-visible { color: #fff; background: #ff5100; transform: scale(1.025); }
+
+/* Homepage */
+.source-home-intro { position: relative; overflow: hidden; color: #000; background: #fff; }
+.source-home-intro::before {
+  position: absolute;
+  inset: 0;
+  background: url("/archive/hosts/xn----ctbjbaararyeivphq.xn--p1ai/wp-content/uploads/2022/01/cropped-1121.png") center/contain no-repeat;
+  content: "";
+  opacity: .1;
+  pointer-events: none;
+}
+.source-home-features { position: relative; z-index: 1; padding-block: 30px; }
+.source-home-feature {
+  display: grid;
+  margin: 30px 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 40px;
+}
+.source-home-copy { min-width: 0; color: #000; font-size: 18px; line-height: 2; }
+.source-home-copy p { margin: 0 0 1em; }
+.source-home-copy h2 {
+  margin: 0 0 18px;
+  color: #000;
+  font: 600 36px/1.18 "Oswald Hroniki", sans-serif;
+  text-transform: uppercase;
+}
+.source-home-image img {
+  display: block;
+  width: 100%;
+  border: 1px solid #000;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px #000;
+}
+.source-home-copy .source-button { margin-top: 15px; }
+.source-home-section { padding: 50px 0; border-right: 1px solid rgba(1, 22, 64, .05); border-left: 1px solid rgba(1, 22, 64, .05); background: #fff; }
+.source-home-section h2 {
+  margin: 0 0 50px;
+  color: #000;
+  font: 600 36px/1.15 "Oswald Hroniki", sans-serif;
+}
+.source-publication-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 35px 30px; }
+.source-publication-card h3 { margin: 0; font: 600 20px/1.3 "Oswald Hroniki", sans-serif; }
+.source-publication-card h3 a { color: #000; text-decoration: none; }
+.source-publication-card h3 a:hover { color: #707070; }
+.source-publication-date { margin: 7px 0 12px; color: #575250; font-size: 16px; line-height: 1.75; }
+.source-publication-excerpt { color: #000; font-size: 18px; line-height: 1.7; }
+.source-home-books { position: relative; }
+.source-carousel { position: relative; padding-inline: 38px; }
+.source-carousel-track {
+  display: grid;
+  padding: 0;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 60px) / 3);
+  column-gap: 30px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.source-carousel-track::-webkit-scrollbar { display: none; }
+.source-carousel-slide { display: flex; height: 410px; align-items: center; justify-content: center; scroll-snap-align: start; }
+.source-carousel-slide img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.source-carousel-arrow {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  width: 38px;
+  height: 64px;
+  padding: 0;
+  border: 0;
+  color: #575250;
+  background: transparent;
+  cursor: pointer;
+  font: 48px/1 Arial, sans-serif;
+  transform: translateY(-50%);
+}
+.source-carousel-arrow.is-prev { left: -4px; }
+.source-carousel-arrow.is-next { right: -4px; }
+.source-home-action { margin-top: 28px; text-align: center; }
+.source-home-video-image { position: relative; display: block; max-width: 992px; margin: 0 auto; }
+.source-home-video-image img { display: block; width: 100%; }
+.source-home-video-image > span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 72px;
+  height: 50px;
+  border-radius: 12px;
+  place-items: center;
+  color: #fff;
+  background: #ff0033;
+  font: 25px/1 Arial, sans-serif;
+  transform: translate(-50%, -50%);
+}
+
+/* Category, blog, event and search archives */
+.source-content-layout {
+  display: grid;
+  margin-top: 72px;
+  margin-bottom: 72px;
+  grid-template-columns: minmax(0, 840px) minmax(250px, 1fr);
+  align-items: start;
+  gap: 30px;
+}
+.source-archive-column { min-width: 0; }
+.source-archive-heading { padding: 84px 120px 55px; background: #eee; }
+.source-archive-heading h1 { margin: 0; color: #575250; font: 400 40px/1.2 "Oswald Hroniki", sans-serif; }
+.source-archive-description { margin-top: 18px; }
+.source-post-list { background: #fff; }
+.source-post-list-item {
+  padding: 96px 120px 82px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+.source-post-list-item h2,
+.source-single-post h1 { margin: 0; color: #575250; font: 400 30px/1.25 "Oswald Hroniki", sans-serif; }
+.source-post-list-item h2 a { color: #575250; text-decoration: none; }
+.source-post-list-item h2 a:hover { color: #ff5100; }
+.source-entry-meta { margin-top: 3px; color: #575250; font-size: 16px; line-height: 1.45; }
+.source-entry-meta a { color: #575250; text-decoration: none; }
+.source-entry-meta a:hover { color: #ff5100; }
+.source-post-excerpt { margin-top: 24px; color: #575250; font-size: 18px; line-height: 1.85; }
+.source-post-excerpt p { margin: 0 0 18px; }
+.source-read-more { color: #575250; font-size: 18px; text-decoration: none; }
+.source-read-more:hover { color: #ff5100; }
+.source-sidebar { min-width: 0; }
+.source-sidebar-widget { padding: 0 30px 30px; }
+.source-sidebar-widget h2 { margin: 0 0 23px; color: #575250; font: 400 25px/1.25 "Oswald Hroniki", sans-serif; }
+.source-sidebar-widget ul { margin: 0; padding: 0; list-style: none; }
+.source-sidebar-widget li { margin-bottom: 13px; line-height: 1.65; }
+.source-sidebar-widget a { display: inline; color: #575250; text-decoration: none; }
+.source-sidebar-widget a:hover { color: #ff5100; }
+.source-sidebar-widget time { display: inline; margin-left: 4px; color: #575250; }
+.source-content-layout.is-single { margin-top: 72px; }
+.source-single-post { padding: 96px 120px; background: #fff; }
+.source-single-header { margin-bottom: 38px; }
+.source-single-featured { display: block; width: 100%; max-height: 650px; margin: 0 auto 32px; object-fit: contain; }
+.source-single-post .article-content { color: #575250; font-size: 18px; line-height: 1.85; }
+.source-single-post .article-content > :first-child { margin-top: 0; }
+.source-single-post .article-content h2 { font-size: 48px; }
+.source-single-post .article-content h3 { font-size: 32px; }
+.source-single-post .article-content h4 { font-size: 22px; }
+
+/* Books and video */
+.source-library-hero {
+  padding: 160px 40px 48px;
+  background: #f8f5f4 url("/archive/hosts/xn----ctbjbaararyeivphq.xn--p1ai/wp-content/uploads/2021/04/book-store-bio-section-bg-img.svg") left center/contain no-repeat;
+}
+.source-library-hero h1 { margin: 0; color: #1e1810; font: 400 88px/1 "Oswald Hroniki", sans-serif; text-align: center; }
+.source-library-content { padding: 100px 40px 50px; }
+.source-library-content .book-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 72px 80px; }
+.source-library-content .book-cover { aspect-ratio: 3 / 4; border: 0; background: transparent; box-shadow: none; }
+.source-library-content .book-card h2 { margin-top: 20px; font-size: 24px; text-align: center; }
+.source-library-content .book-card h2 a { color: #575250; }
+.source-book-shell { max-width: 1000px; padding: 54px 20px 70px; }
+.source-book-article { background: #fff; }
+.source-book-article > h1 { margin: 0 0 32px; color: #1e1810; font: 400 30px/1.25 "Oswald Hroniki", sans-serif; text-align: center; }
+.source-book-article .book-detail { grid-template-columns: 240px minmax(0, 1fr); align-items: start; gap: 36px; }
+.source-book-article .book-cover { position: static; aspect-ratio: 3 / 4; border: 0; box-shadow: none; }
+.source-book-article .article-content { color: #575250; font-size: 18px; line-height: 1.95; }
+.source-download-label { margin: 8px 0 10px; color: #575250; font: 600 22px/1.3 "Oswald Hroniki", sans-serif; }
+.source-book-article .book-file-button { min-width: 0; width: 100%; margin-top: 0; padding-inline: 12px; }
+.source-video-content { padding: 0 40px 60px; background: #f8f5f4; }
+.source-video-author { display: inline-flex; margin: 0 0 28px; align-items: center; gap: 12px; color: #1e1810; text-decoration: none; }
+.source-video-author img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+.source-video-author span { font-size: 18px; }
+.source-video-content .video-grid { padding: 15px; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; }
+.source-video-content .video-card { position: relative; display: block; overflow: hidden; aspect-ratio: 16 / 9; border: 0; background: #211915; }
+.source-video-content .video-card.is-hidden { display: none; }
+.source-video-content .video-card img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .25s ease; }
+.source-video-content .video-card:hover img { transform: scale(1.025); }
+.source-youtube-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 56px;
+  height: 40px;
+  border-radius: 10px;
+  place-items: center;
+  color: #fff;
+  background: rgba(0, 0, 0, .72);
+  font: 21px/1 Arial, sans-serif;
+  transform: translate(-50%, -50%);
+}
+.source-video-actions { display: flex; margin-top: 22px; align-items: center; justify-content: center; gap: 8px; }
+.source-video-more,
+.source-video-subscribe {
+  display: inline-flex;
+  min-height: 40px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 3px;
+  align-items: center;
+  color: #fff;
+  background: #333;
+  font: 700 15px/1 "Oswald Hroniki", sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+}
+.source-video-subscribe { background: #e62117; }
+
+/* About page from the source site */
+.source-biography { padding: 0 0 60px; color: #575250; font-size: 18px; line-height: 2; }
+.source-biography h1 { margin: 0 0 20px; color: #1e1810; font: 400 88px/1 "Oswald Hroniki", sans-serif; text-transform: uppercase; }
+.source-biography p { margin: 0 0 1em; }
+.source-biography #ozad { padding-top: 30px; }
+
+@media (max-width: 1080px) {
+  .source-content-layout { grid-template-columns: minmax(0, 2fr) minmax(250px, 1fr); gap: 20px; }
+  .source-archive-heading { padding-inline: 65px; }
+  .source-post-list-item,
+  .source-single-post { padding: 70px 65px; }
+  .source-library-content .book-grid { gap: 55px 50px; }
+}
+
+@media (max-width: 900px) {
+  .source-home-feature { grid-template-columns: 1fr; }
+  .source-publication-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .source-carousel-track { grid-auto-columns: calc((100% - 30px) / 2); }
+  .source-content-layout { grid-template-columns: 1fr; }
+  .source-sidebar-widget { padding: 32px; background: #fff; }
+  .source-library-hero { padding: 128px 40px 48px; background-position: bottom left; background-size: 50vw auto; }
+  .source-library-content .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .source-video-content .video-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .source-biography h1 { font-size: 64px; }
+}
+
+@media (max-width: 650px) {
+  body { font-size: 16px; }
+  .source-home-features { padding-block: 1px; }
+  .source-home-feature { margin: 28px 0 44px; gap: 24px; }
+  .source-home-copy { font-size: 16px; line-height: 1.8; }
+  .source-home-copy h2 { font-size: 30px; }
+  .source-home-section { padding: 42px 0; }
+  .source-home-section h2 { margin-bottom: 32px; font-size: 30px; }
+  .source-publication-grid { grid-template-columns: 1fr; }
+  .source-publication-excerpt { font-size: 16px; }
+  .source-carousel { padding-inline: 24px; }
+  .source-carousel-track { grid-auto-columns: 100%; column-gap: 14px; }
+  .source-carousel-slide { height: 380px; }
+  .source-carousel-arrow { width: 30px; font-size: 38px; }
+  .source-content-layout { margin-top: 28px; margin-bottom: 45px; }
+  .source-archive-heading { padding: 58px 22px 42px; }
+  .source-archive-heading h1 { font-size: 40px; }
+  .source-post-list-item,
+  .source-single-post { padding: 42px 22px; }
+  .source-post-list-item h2,
+  .source-single-post h1 { font-size: 28px; }
+  .source-post-excerpt,
+  .source-single-post .article-content { font-size: 16px; line-height: 1.75; }
+  .source-sidebar-widget { padding: 26px 22px; }
+  .source-library-hero { padding: 96px 24px 48px; background-size: contain; }
+  .source-library-hero h1 { font-size: 40px; }
+  .source-library-content { padding: 60px 12px 35px; }
+  .source-library-content .book-grid { gap: 38px 14px; }
+  .source-library-content .book-card h2 { font-size: 20px; }
+  .source-book-shell { padding: 34px 12px 50px; }
+  .source-book-article .book-detail { grid-template-columns: 1fr; }
+  .source-book-cover-column { width: min(100%, 340px); margin-inline: auto; }
+  .source-book-article .article-content { font-size: 16px; }
+  .source-video-content { padding: 0 0 42px; }
+  .source-video-content .video-grid { padding: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .source-video-author { margin-left: 12px; }
+  .source-youtube-play { width: 44px; height: 32px; font-size: 16px; }
+  .source-video-actions { flex-wrap: wrap; }
+  .source-biography { font-size: 16px; line-height: 1.8; }
+  .source-biography h1 { font-size: 40px; }
+}

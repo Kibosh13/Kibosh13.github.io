@@ -15,6 +15,7 @@ $legacy_host = '/archive/hosts/xn----ctbjbaararyeivphq.xn--p1ai';
 $old_origin = 'https://xn----ctbjbaararyeivphq.xn--p1ai';
 
 wp_set_current_user(1);
+update_option('default_ping_status', 'closed');
 
 function hroniki_import_json(string $path): array
 {
@@ -26,6 +27,15 @@ function hroniki_import_json(string $path): array
         WP_CLI::error('Некорректный JSON: ' . $path);
     }
     return $data;
+}
+
+function hroniki_import_branding(string $text): string
+{
+    return str_replace(
+        ['ВЕСТНИКИ ПЕРЕМЕН', 'ВЕСТНИКИ перемен', 'Вестники Перемен', 'Вестники перемен', 'вестники перемен'],
+        ['ХРОНИКИ ПРЕОБРАЖЕНИЯ МИРА', 'ХРОНИКИ ПРЕОБРАЖЕНИЯ МИРА', 'Хроники преображения Мира', 'Хроники преображения Мира', 'хроники преображения Мира'],
+        $text
+    );
 }
 
 function hroniki_import_localize(string $html, string $old_origin, string $legacy_host): string
@@ -49,7 +59,7 @@ function hroniki_import_localize(string $html, string $old_origin, string $legac
         $old_origin . '/' => home_url('/'),
         'http://xn----ctbjbaararyeivphq.xn--p1ai/' => home_url('/'),
     ];
-    return strtr($html, $replacements);
+    return hroniki_import_branding(strtr($html, $replacements));
 }
 
 function hroniki_import_term(array $definition, array &$term_ids): int
@@ -72,6 +82,8 @@ function hroniki_import_term(array $definition, array &$term_ids): int
 
 function hroniki_import_upsert(array $post_data, string $legacy_key, string $legacy_value): int
 {
+    // Archived entries must not contact every historical external URL after import.
+    $post_data['ping_status'] = 'closed';
     $existing = get_posts([
         'post_type' => $post_data['post_type'],
         'post_status' => 'any',
@@ -90,6 +102,8 @@ function hroniki_import_upsert(array $post_data, string $legacy_key, string $leg
         return 0;
     }
     update_post_meta($post_id, $legacy_key, $legacy_value);
+    delete_post_meta($post_id, '_pingme');
+    delete_post_meta($post_id, '_encloseme');
     return (int) $post_id;
 }
 
@@ -166,6 +180,21 @@ function hroniki_import_post_cover(string $path, int $legacy_id, string $old_ori
     return '';
 }
 
+function hroniki_import_post_author(string $path, int $legacy_id): string
+{
+    $dom = hroniki_import_dom($path);
+    if (!$dom) {
+        return '';
+    }
+    $xpath = new DOMXPath($dom);
+    $article_id = 'post-' . $legacy_id;
+    $author = $xpath->query(
+        "//article[@id='" . $article_id . "']//*[contains(concat(' ', normalize-space(@class), ' '), ' author-name ')]"
+    );
+    $author_node = $author ? $author->item(0) : null;
+    return $author_node ? trim((string) $author_node->textContent) : '';
+}
+
 $category_defs = [
     ['path' => 'news', 'name' => 'Новости', 'slug' => 'news', 'parent' => null],
     ['path' => 'meropriyatiya', 'name' => 'Мероприятия', 'slug' => 'meropriyatiya', 'parent' => null],
@@ -206,7 +235,7 @@ foreach ($posts as $record) {
     if (($record['status'] ?? 'publish') !== 'publish') {
         continue;
     }
-    $title = html_entity_decode(wp_strip_all_tags($record['title']['rendered'] ?? 'Без названия'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $title = hroniki_import_branding(html_entity_decode(wp_strip_all_tags($record['title']['rendered'] ?? 'Без названия'), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
     $post_term_ids = [];
     foreach ($legacy_category_paths as $legacy_id => $path) {
         if (in_array($legacy_id, $record['categories'] ?? [], true)) {
@@ -219,7 +248,7 @@ foreach ($posts as $record) {
         'post_title' => $title,
         'post_name' => sanitize_title($record['slug'] ?? $title),
         'post_content' => hroniki_import_localize($record['content']['rendered'] ?? '', $old_origin, $legacy_host),
-        'post_excerpt' => html_entity_decode(wp_strip_all_tags($record['excerpt']['rendered'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+        'post_excerpt' => hroniki_import_branding(html_entity_decode(wp_strip_all_tags($record['excerpt']['rendered'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8')),
         'post_date' => $record['date'] ?? current_time('mysql'),
         'post_date_gmt' => get_gmt_from_date($record['date'] ?? current_time('mysql')),
         'post_modified' => $record['modified'] ?? ($record['date'] ?? current_time('mysql')),
@@ -244,6 +273,15 @@ foreach ($posts as $record) {
             update_post_meta($post_id, '_hroniki_cover_url', esc_url_raw($cover));
         } else {
             delete_post_meta($post_id, '_hroniki_cover_url');
+        }
+        $source_author = hroniki_import_post_author(
+            rtrim($archive_dir, '/') . '/' . $slug . '/index.html',
+            $legacy_id
+        );
+        if ($source_author !== '') {
+            update_post_meta($post_id, '_hroniki_source_author', sanitize_text_field($source_author));
+        } else {
+            delete_post_meta($post_id, '_hroniki_source_author');
         }
         $post_count++;
     }
@@ -271,7 +309,7 @@ $books = hroniki_import_json(rtrim($data_dir, '/') . '/books.json');
 $book_count = 0;
 foreach ($books as $record) {
     $slug = sanitize_title($record['slug'] ?? 'book-' . ($record['id'] ?? wp_rand()));
-    $title = html_entity_decode(wp_strip_all_tags($record['title']['rendered'] ?? 'Без названия'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $title = hroniki_import_branding(html_entity_decode(wp_strip_all_tags($record['title']['rendered'] ?? 'Без названия'), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
     $path = rtrim($archive_dir, '/') . '/book/' . $slug . '/index.html';
     $dom = hroniki_import_dom($path);
     $content = '';
@@ -310,9 +348,23 @@ foreach ($books as $record) {
     }
 }
 
+$home_default_content = '<p>И.Н. Мы решили зарегистрировать Общественное Движение «Хроники преображения Мира», сделать его официальным и заявить о нём в общественной среде России.</p>'
+    . '<p>Какие напутствия есть для нас со стороны Вышних Светлых Сил в этом деле?</p>'
+    . '<p>ММ Мир нуждается в Благой Вести о том, что конца Света не будет, а будет продолжение жизни в совершенно ином качестве, нежели она была в эпохе Рыб, ознаменовавшей себя самыми тёмными временами жизни на Планете. Но теперь Мир Тьмы заканчивает своё существование. Он не имеет возможности преодолеть препятствие трёх измерений, которые в Новой Эпохе накрываются более высокими мерностями, и этим завершают главенство сил Тьмы на поверхности Земли…</p>';
+$home_existing = get_posts([
+    'post_type' => 'page', 'post_status' => 'any',
+    'meta_key' => '_hroniki_system_page', 'meta_value' => 'home', 'posts_per_page' => 1,
+]);
+if ($home_existing) {
+    $current_home_content = (string) get_post_field('post_content', $home_existing[0]);
+    $old_home_placeholder = '<p>Авторский сайт Ирины Ниловой с полным архивом материалов, книг, публикаций и новых записей.</p>';
+    if (trim($current_home_content) !== '' && trim($current_home_content) !== $old_home_placeholder && trim($current_home_content) !== $home_default_content) {
+        $home_default_content = $current_home_content;
+    }
+}
 $home_id = hroniki_import_upsert([
     'post_type' => 'page', 'post_status' => 'publish', 'post_title' => 'Главная', 'post_name' => 'glavnaya',
-    'post_content' => '<p>Авторский сайт Ирины Ниловой с полным архивом материалов, книг, публикаций и новых записей.</p>',
+    'post_content' => $home_default_content,
     'post_author' => 1,
 ], '_hroniki_system_page', 'home');
 $bio_content = hroniki_import_static_page_content(rtrim($archive_dir, '/') . '/biography/index.html', $old_origin, $legacy_host);

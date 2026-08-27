@@ -18,8 +18,10 @@ add_action('after_setup_theme', 'hroniki_theme_setup');
 
 function hroniki_theme_assets(): void
 {
-    wp_enqueue_style('hroniki-style', get_stylesheet_uri(), [], wp_get_theme()->get('Version'));
-    wp_enqueue_script('hroniki-site', get_template_directory_uri() . '/assets/site.js', [], wp_get_theme()->get('Version'), true);
+    $style_path = get_stylesheet_directory() . '/style.css';
+    $script_path = get_template_directory() . '/assets/site.js';
+    wp_enqueue_style('hroniki-style', get_stylesheet_uri(), [], (string) filemtime($style_path));
+    wp_enqueue_script('hroniki-site', get_template_directory_uri() . '/assets/site.js', [], (string) filemtime($script_path), true);
 }
 add_action('wp_enqueue_scripts', 'hroniki_theme_assets');
 
@@ -124,6 +126,27 @@ function hroniki_category_description(): string
         return 'Книги Ирины Ниловой: восстановленный архив и новые издания.';
     }
     return '';
+}
+
+function hroniki_source_author(int $post_id = 0): string
+{
+    $post_id = $post_id ?: get_the_ID();
+    $source_author = trim((string) get_post_meta($post_id, '_hroniki_source_author', true));
+    return $source_author !== '' ? $source_author : 'И. Нилова';
+}
+
+function hroniki_entry_meta(): void
+{
+    $categories = get_the_category();
+    $category_links = [];
+    foreach ($categories as $category) {
+        $category_links[] = '<a href="' . esc_url(get_category_link($category)) . '">' . esc_html($category->name) . '</a>';
+    }
+    echo '<span>Оставьте комментарий</span>';
+    if ($category_links) {
+        echo ' / <span>' . implode(', ', $category_links) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    }
+    echo ' / <span>От ' . esc_html(hroniki_source_author()) . '</span>';
 }
 
 function hroniki_disable_comments_for_content(bool $open, int $post_id): bool

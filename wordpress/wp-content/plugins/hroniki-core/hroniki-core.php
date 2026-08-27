@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Хроники — управление сайтом
  * Description: Книги, загрузка файлов и настройки сайта «Хроники преображения Мира».
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Хроники преображения Мира
  */
 
@@ -155,6 +155,25 @@ function hroniki_register_settings(): void
         'sanitize_callback' => static fn($value) => min(12, max(3, absint($value))),
         'default' => 6,
     ]);
+    foreach (['hroniki_home_first_image_url', 'hroniki_home_second_image_url', 'hroniki_home_video_image_url'] as $option_name) {
+        register_setting('hroniki_site', $option_name, [
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw',
+            'default' => '',
+        ]);
+    }
+    foreach (['hroniki_home_second_title', 'hroniki_home_publications_title', 'hroniki_home_books_title', 'hroniki_home_video_title'] as $option_name) {
+        register_setting('hroniki_site', $option_name, [
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default' => '',
+        ]);
+    }
+    register_setting('hroniki_site', 'hroniki_home_second_text', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_textarea_field',
+        'default' => '',
+    ]);
 }
 add_action('admin_init', 'hroniki_register_settings');
 
@@ -179,7 +198,7 @@ function hroniki_render_settings_page(): void
     ?>
     <div class="wrap">
         <h1>Настройки сайта</h1>
-        <p>Главная страница редактируется обычным редактором WordPress.</p>
+        <p>Первый текстовый блок главной редактируется обычным редактором WordPress. Остальные блоки настраиваются ниже.</p>
         <?php if ($front_page_id) : ?>
             <p><a class="button button-primary" href="<?php echo esc_url(get_edit_post_link($front_page_id)); ?>">Редактировать главную</a></p>
         <?php endif; ?>
@@ -197,6 +216,38 @@ function hroniki_render_settings_page(): void
                 <tr>
                     <th scope="row"><label for="hroniki_home_news_count">Новостей на главной</label></th>
                     <td><input type="number" min="3" max="12" id="hroniki_home_news_count" name="hroniki_home_news_count" value="<?php echo esc_attr((string) get_option('hroniki_home_news_count', 6)); ?>"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_home_first_image_url">Первая картинка главной</label></th>
+                    <td><input class="large-text" type="url" id="hroniki_home_first_image_url" name="hroniki_home_first_image_url" value="<?php echo esc_attr((string) get_option('hroniki_home_first_image_url')); ?>" placeholder="Оставьте пустым для исходной картинки"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_home_second_title">Заголовок второго блока</label></th>
+                    <td><input class="large-text" id="hroniki_home_second_title" name="hroniki_home_second_title" value="<?php echo esc_attr((string) get_option('hroniki_home_second_title')); ?>" placeholder="О задачах общественного движения…"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_home_second_text">Текст второго блока</label></th>
+                    <td><textarea class="large-text" rows="7" id="hroniki_home_second_text" name="hroniki_home_second_text" placeholder="Оставьте пустым для исходного текста"><?php echo esc_textarea((string) get_option('hroniki_home_second_text')); ?></textarea></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_home_second_image_url">Вторая картинка главной</label></th>
+                    <td><input class="large-text" type="url" id="hroniki_home_second_image_url" name="hroniki_home_second_image_url" value="<?php echo esc_attr((string) get_option('hroniki_home_second_image_url')); ?>" placeholder="Оставьте пустым для исходной картинки"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_home_publications_title">Заголовок публикаций</label></th>
+                    <td><input class="large-text" id="hroniki_home_publications_title" name="hroniki_home_publications_title" value="<?php echo esc_attr((string) get_option('hroniki_home_publications_title')); ?>" placeholder="Публикации «Хроники преображения Мира»"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_home_books_title">Заголовок книг</label></th>
+                    <td><input class="large-text" id="hroniki_home_books_title" name="hroniki_home_books_title" value="<?php echo esc_attr((string) get_option('hroniki_home_books_title')); ?>" placeholder="Книги Ирины Ниловой"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_home_video_title">Заголовок видео</label></th>
+                    <td><input class="large-text" id="hroniki_home_video_title" name="hroniki_home_video_title" value="<?php echo esc_attr((string) get_option('hroniki_home_video_title')); ?>" placeholder="Видео"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_home_video_image_url">Картинка блока видео</label></th>
+                    <td><input class="large-text" type="url" id="hroniki_home_video_image_url" name="hroniki_home_video_image_url" value="<?php echo esc_attr((string) get_option('hroniki_home_video_image_url')); ?>" placeholder="Оставьте пустым для исходной картинки"></td>
                 </tr>
             </table>
             <?php submit_button(); ?>
@@ -229,4 +280,3 @@ function hroniki_admin_post_columns(array $columns): array
     return $columns;
 }
 add_filter('manage_posts_columns', 'hroniki_admin_post_columns');
-
