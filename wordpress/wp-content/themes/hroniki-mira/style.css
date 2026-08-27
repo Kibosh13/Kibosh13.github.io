@@ -1,0 +1,393 @@
+/*
+Theme Name: Хроники преображения Мира
+Theme URI: https://преображение-мира.рф/
+Author: Хроники преображения Мира
+Description: Самостоятельная тема восстановленного авторского сайта Ирины Ниловой.
+Version: 1.0.0
+Text Domain: hroniki-mira
+*/
+
+@font-face {
+  font-family: "Oswald Hroniki";
+  src: url("/archive/hosts/fonts.gstatic.com/s/oswald/v57/TK3iWkUHHAIjg752HT8Gl-1PK62t.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  --orange: #f47d48;
+  --orange-deep: #d75f2c;
+  --ink: #231f1d;
+  --muted: #766c65;
+  --paper: #fbf8f6;
+  --panel: #ffffff;
+  --line: #e8ddd7;
+  --soft: #f3ece8;
+  --content: 1180px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: Arial, sans-serif;
+  line-height: 1.65;
+}
+body.menu-open { overflow: hidden; }
+img { max-width: 100%; height: auto; }
+a { color: var(--orange-deep); }
+.screen-reader-text {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.wrap { width: min(var(--content), calc(100% - 40px)); margin-inline: auto; }
+
+.site-header {
+  position: relative;
+  z-index: 50;
+  border-top: 2px solid var(--orange);
+  border-bottom: 2px solid var(--orange);
+  background: rgba(251, 248, 246, .97);
+}
+.header-inner {
+  display: grid;
+  min-height: 142px;
+  grid-template-columns: 240px minmax(0, 1fr) 210px;
+  align-items: center;
+  gap: 24px;
+}
+.site-branding { min-width: 0; }
+.site-title {
+  display: block;
+  color: var(--orange);
+  font-family: "Oswald Hroniki", Impact, sans-serif;
+  font-size: 32px;
+  line-height: .98;
+  text-align: center;
+  text-decoration: none;
+}
+.site-description { margin: 8px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
+.desktop-navigation ul { display: flex; margin: 0; padding: 0; align-items: center; list-style: none; }
+.desktop-navigation > ul { justify-content: center; }
+.desktop-navigation li { position: relative; }
+.desktop-navigation a {
+  display: flex;
+  min-height: 52px;
+  padding: 12px 13px;
+  border-left: 2px dotted var(--orange);
+  align-items: center;
+  color: #171411;
+  font-family: "Oswald Hroniki", Impact, sans-serif;
+  font-size: 18px;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.desktop-navigation .menu-item-has-children > a::after {
+  width: 0;
+  height: 0;
+  margin-left: 8px;
+  border-top: 7px solid currentColor;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  content: "";
+}
+.desktop-navigation a:hover,
+.desktop-navigation a:focus-visible,
+.desktop-navigation .current-menu-item > a,
+.desktop-navigation .current-menu-ancestor > a { color: var(--orange-deep); background: #fff3ed; }
+.desktop-navigation .sub-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: grid;
+  min-width: 260px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  visibility: hidden;
+  opacity: 0;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(35, 24, 19, .16);
+  transform: translateY(8px);
+  transition: .18s ease;
+}
+.desktop-navigation .sub-menu a { min-height: 42px; border: 0; border-radius: 7px; white-space: normal; }
+.desktop-navigation li:hover > .sub-menu,
+.desktop-navigation li:focus-within > .sub-menu { visibility: visible; opacity: 1; transform: translateY(0); }
+.desktop-navigation .sub-menu .sub-menu { top: -8px; left: 100%; }
+.header-search { position: relative; }
+.header-search input {
+  width: 100%;
+  height: 44px;
+  padding: 0 42px 0 13px;
+  border: 1px solid #cfc4bd;
+  border-radius: 7px;
+  background: #fff;
+  font: 14px/1 Arial, sans-serif;
+}
+.header-search button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 42px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  color: var(--orange-deep);
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+}
+.menu-toggle, .mobile-menu-layer { display: none; }
+
+.site-main { min-height: 60vh; }
+.page-shell { padding: 58px 0 82px; }
+.archive-heading {
+  margin-bottom: 34px;
+  padding: 42px;
+  background: #f0eeed;
+}
+.archive-heading .eyebrow,
+.section-heading .eyebrow { color: var(--orange); font: 700 13px/1.2 Arial, sans-serif; letter-spacing: .13em; text-transform: uppercase; }
+.archive-heading h1,
+.section-heading h2,
+.article h1,
+.hero h1 {
+  margin: 10px 0 0;
+  font-family: "Oswald Hroniki", Impact, sans-serif;
+  font-weight: 400;
+  line-height: 1.04;
+}
+.archive-heading h1 { font-size: clamp(43px, 7vw, 76px); }
+.archive-heading p { max-width: 760px; margin: 15px 0 0; color: var(--muted); }
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(64px, 10vw, 132px) 0;
+  background:
+    linear-gradient(105deg, rgba(26, 18, 14, .80), rgba(26, 18, 14, .18)),
+    url("/archive/hosts/xn----ctbjbaararyeivphq.xn--p1ai/wp-content/uploads/2022/01/11211.jpg") center/cover no-repeat;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 850px; color: #fff; }
+.hero .eyebrow { color: #ffac83; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.hero h1 { max-width: 800px; font-size: clamp(52px, 8vw, 98px); }
+.hero-content { max-width: 700px; margin-top: 24px; font-size: clamp(18px, 2vw, 22px); }
+.hero-content > :first-child { margin-top: 0; }
+.hero-content > :last-child { margin-bottom: 0; }
+.hero-actions { display: flex; margin-top: 28px; flex-wrap: wrap; gap: 12px; }
+.button-link {
+  display: inline-flex;
+  min-height: 48px;
+  padding: 11px 22px;
+  border: 2px solid var(--orange);
+  border-radius: 7px;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: var(--orange);
+  font-weight: 700;
+  text-decoration: none;
+}
+.button-link:hover { border-color: var(--orange-deep); background: var(--orange-deep); }
+.button-link.is-light { border-color: rgba(255,255,255,.72); background: rgba(255,255,255,.10); }
+
+.home-section { padding: 72px 0; }
+.home-section.is-soft { background: var(--soft); }
+.section-heading { display: flex; margin-bottom: 30px; align-items: end; justify-content: space-between; gap: 20px; }
+.section-heading h2 { font-size: clamp(39px, 6vw, 65px); }
+.section-heading > a { flex: none; }
+.post-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.post-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--panel);
+  box-shadow: 0 9px 28px rgba(36, 33, 31, .05);
+}
+.post-card-image { display: block; height: 215px; overflow: hidden; background: #eee8e4; }
+.post-card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+.post-card:hover .post-card-image img { transform: scale(1.025); }
+.post-card-placeholder { display: grid; width: 100%; height: 100%; place-items: center; color: #b2a39a; font: 54px/1 "Oswald Hroniki", sans-serif; }
+.post-card-body { padding: 24px; }
+.post-meta { color: #8b7f77; font-size: 13px; }
+.post-card h2 { margin: 10px 0 12px; font: 400 27px/1.2 "Oswald Hroniki", Impact, sans-serif; }
+.post-card h2 a { color: var(--ink); text-decoration: none; }
+.post-card h2 a:hover { color: var(--orange-deep); }
+.post-card p { display: -webkit-box; overflow: hidden; margin: 0 0 18px; color: #5f5853; line-height: 1.58; -webkit-box-orient: vertical; -webkit-line-clamp: 4; }
+.read-more { font: 700 13px/1 "Oswald Hroniki", sans-serif; letter-spacing: .06em; text-decoration: none; text-transform: uppercase; }
+
+.book-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; }
+.book-card { min-width: 0; }
+.book-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow: 0 13px 30px rgba(35, 25, 19, .10);
+}
+.book-cover img { width: 100%; height: 100%; object-fit: contain; }
+.book-cover .post-card-placeholder { font-size: 74px; }
+.book-card h2 { margin: 14px 0 0; font: 400 24px/1.25 "Oswald Hroniki", sans-serif; }
+.book-card h2 a { color: var(--ink); text-decoration: none; }
+.book-card h2 a:hover { color: var(--orange-deep); }
+
+.article {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(25px, 5vw, 56px);
+  background: #fff;
+  box-shadow: 0 12px 45px rgba(36, 33, 31, .07);
+}
+.breadcrumbs { display: flex; margin-bottom: 18px; flex-wrap: wrap; gap: 8px; color: #8b7f77; font-size: 14px; }
+.breadcrumbs a { text-decoration: none; }
+.article h1 { margin: 0 0 22px; font-size: clamp(42px, 6vw, 72px); }
+.article-date { margin: -10px 0 28px; color: #8b7f77; }
+.article-featured { display: block; width: 100%; max-height: 650px; margin: 0 auto 32px; object-fit: contain; background: #f7f3f0; }
+.article-content { font-size: 18px; }
+.article-content::after { display: table; clear: both; content: ""; }
+.article-content h2, .article-content h3, .article-content h4 { font-family: "Oswald Hroniki", sans-serif; font-weight: 400; line-height: 1.2; }
+.article-content h2 { font-size: 39px; }
+.article-content h3 { font-size: 30px; }
+.article-content img { max-width: 100%; height: auto; }
+.article-content iframe { max-width: 100%; }
+.article-content blockquote { margin: 28px 0; padding: 18px 24px; border-left: 4px solid var(--orange); background: #fff4ee; }
+.article-content table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+.article-content td, .article-content th { padding: 8px; border: 1px solid var(--line); }
+.book-detail { display: grid; grid-template-columns: minmax(230px, 330px) minmax(0, 1fr); gap: clamp(28px, 5vw, 58px); }
+.book-detail .book-cover { position: sticky; top: 25px; }
+.book-file-button { margin-top: 20px; width: 100%; }
+
+.video-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.video-card { overflow: hidden; border: 1px solid var(--line); background: #fff; }
+.video-card-thumb { position: relative; display: block; aspect-ratio: 16/9; overflow: hidden; background: #211915; }
+.video-card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.video-card-thumb::after { position: absolute; top: 50%; left: 50%; display: grid; width: 58px; height: 42px; border-radius: 11px; place-items: center; color: #fff; background: #ff0033; content: "▶"; transform: translate(-50%, -50%); }
+.video-card h2 { margin: 0; padding: 18px; font: 400 23px/1.3 "Oswald Hroniki", sans-serif; }
+.video-card h2 a { color: var(--ink); text-decoration: none; }
+
+.pagination { margin-top: 42px; }
+.pagination .nav-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 7px; }
+.pagination .page-numbers { display: grid; min-width: 42px; height: 42px; padding: 0 10px; border: 1px solid var(--line); place-items: center; color: var(--ink); background: #fff; text-decoration: none; }
+.pagination .current, .pagination a:hover { border-color: var(--orange); color: #fff; background: var(--orange); }
+.empty-state { padding: 50px; color: var(--muted); background: #fff; text-align: center; }
+.search-page-form { display: flex; max-width: 680px; margin-top: 24px; gap: 9px; }
+.search-page-form input { flex: 1; min-width: 0; height: 48px; padding: 0 14px; border: 1px solid #cfc4bd; border-radius: 6px; font: inherit; }
+.search-page-form button { border: 0; border-radius: 6px; color: #fff; background: var(--orange); font: 700 15px/1 Arial, sans-serif; }
+
+.site-footer { padding: 30px 0; color: #6f6761; background: #eee7e3; }
+.footer-inner { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px; text-align: center; }
+.liveinternet-counter { display: inline-flex; flex: none; line-height: 0; }
+.liveinternet-counter img { display: block; width: 88px; height: 31px; border: 0; }
+
+@media (max-width: 1080px) {
+  .header-inner { grid-template-columns: 220px minmax(0, 1fr); }
+  .header-search { display: none; }
+  .desktop-navigation a { padding-inline: 10px; font-size: 17px; }
+  .book-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+  .wrap { width: min(var(--content), calc(100% - 30px)); }
+  .header-inner { display: flex; min-height: 92px; justify-content: space-between; gap: 18px; }
+  .site-title { font-size: 26px; text-align: left; }
+  .site-description, .desktop-navigation { display: none; }
+  .menu-toggle {
+    display: inline-flex;
+    width: 54px;
+    height: 54px;
+    padding: 0;
+    border: 0;
+    border-radius: 18px;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    flex-direction: column;
+    gap: 5px;
+    color: #fff;
+    background: var(--orange);
+    box-shadow: 0 10px 26px rgba(210, 89, 37, .28);
+    cursor: pointer;
+  }
+  .menu-toggle span { width: 22px; height: 2px; border-radius: 2px; background: currentColor; }
+  .mobile-menu-layer {
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .25s ease, visibility .25s ease;
+  }
+  .mobile-menu-layer.is-open { visibility: visible; opacity: 1; }
+  .mobile-menu-backdrop { position: absolute; inset: 0; border: 0; background: rgba(35, 24, 19, .48); backdrop-filter: blur(5px); }
+  .mobile-menu-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    width: min(91vw, 410px);
+    height: 100%;
+    padding: max(22px, env(safe-area-inset-top)) 22px max(22px, env(safe-area-inset-bottom));
+    flex-direction: column;
+    overflow-y: auto;
+    background: #fffaf7;
+    box-shadow: -24px 0 70px rgba(35, 24, 19, .24);
+    transform: translateX(102%);
+    transition: transform .32s cubic-bezier(.22, .72, .24, 1);
+  }
+  .mobile-menu-layer.is-open .mobile-menu-panel { transform: translateX(0); }
+  .mobile-menu-head { display: flex; padding-bottom: 18px; border-bottom: 1px solid var(--line); align-items: center; justify-content: space-between; gap: 15px; }
+  .mobile-menu-head > a { color: var(--orange-deep); font: 400 23px/1.05 "Oswald Hroniki", sans-serif; text-decoration: none; }
+  .mobile-menu-close { width: 44px; height: 44px; padding: 0; border: 1px solid var(--line); border-radius: 50%; color: #4a3329; background: #fff; font: 300 30px/1 Arial, sans-serif; cursor: pointer; }
+  .mobile-navigation { margin: 18px 0 20px; }
+  .mobile-navigation ul { margin: 0; padding: 0; list-style: none; }
+  .mobile-navigation li { position: relative; }
+  .mobile-navigation a { display: flex; min-height: 48px; padding: 8px 48px 8px 12px; border-radius: 12px; align-items: center; color: #211915; font: 400 21px/1.2 "Oswald Hroniki", sans-serif; text-decoration: none; }
+  .mobile-navigation a:hover, .mobile-navigation a:focus-visible, .mobile-navigation .current-menu-item > a { color: var(--orange-deep); background: #fff0e8; }
+  .mobile-submenu-toggle { position: absolute; top: 5px; right: 4px; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 9px; color: var(--orange-deep); background: transparent; cursor: pointer; }
+  .mobile-submenu-toggle::before { display: inline-block; width: 9px; height: 9px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; content: ""; transform: translateY(-2px) rotate(45deg); transition: transform .2s ease; }
+  .mobile-submenu-toggle[aria-expanded="true"]::before { transform: translateY(3px) rotate(225deg); }
+  .mobile-navigation .sub-menu { display: none; padding-left: 14px; }
+  .mobile-navigation .sub-menu.is-open { display: block; }
+  .mobile-navigation .sub-menu a { min-height: 42px; font-size: 18px; }
+  .mobile-search { position: relative; margin-top: auto; }
+  .mobile-search input { width: 100%; height: 48px; padding: 0 48px 0 14px; border: 1px solid #d9cac2; border-radius: 13px; background: #fff; font: 15px/1 Arial, sans-serif; }
+  .mobile-search button { position: absolute; top: 0; right: 0; width: 48px; height: 48px; padding: 0; border: 0; color: var(--orange-deep); background: transparent; font-size: 19px; }
+  .post-grid, .video-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .book-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 650px) {
+  .wrap { width: min(var(--content), calc(100% - 24px)); }
+  .site-title { max-width: 240px; font-size: 23px; }
+  .hero { padding: 72px 0; }
+  .hero h1 { font-size: clamp(47px, 15vw, 68px); }
+  .home-section { padding: 50px 0; }
+  .section-heading { align-items: start; flex-direction: column; }
+  .page-shell { padding: 28px 0 55px; }
+  .archive-heading { padding: 28px 22px; }
+  .post-grid, .video-grid { grid-template-columns: 1fr; }
+  .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; }
+  .book-card h2 { font-size: 20px; }
+  .article-content { font-size: 16px; }
+  .book-detail { grid-template-columns: 1fr; }
+  .book-detail .book-cover { position: static; max-width: 380px; margin-inline: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; }
+}
+

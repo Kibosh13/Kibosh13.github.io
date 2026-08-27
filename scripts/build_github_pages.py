@@ -14,6 +14,8 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 TAG_RE = re.compile(r"<[^>]+>")
 SPACE_RE = re.compile(r"\s+")
+ROBOTS_META_RE = re.compile(r'<meta\s+name=["\']robots["\'][^>]*>', re.IGNORECASE)
+NOINDEX_META = '<meta name="robots" content="noindex,nofollow,noarchive">'
 
 
 def plain_text(value: str) -> str:
@@ -57,7 +59,7 @@ def write_search_page(output: Path) -> None:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Поиск — Хроники преображения Мира</title>
-  <meta name="robots" content="noindex,follow">
+  <meta name="robots" content="noindex,nofollow,noarchive">
   <style>
     :root{font-family:Arial,sans-serif;color:#151515;background:#fffaf7}
     *{box-sizing:border-box}body{margin:0}header{padding:26px 5vw;border-top:4px solid #ff7657;border-bottom:1px solid #f2d9d1;background:#fff}
@@ -136,10 +138,24 @@ def write_search_page(output: Path) -> None:
 def write_support_files(output: Path) -> None:
     output.joinpath(".nojekyll").touch()
     output.joinpath("404.html").write_text(
-        """<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Страница не найдена</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:12vh 24px;color:#171717}h1{font-size:clamp(40px,8vw,80px)}a{color:#d94f33;font-size:20px}</style></head><body><h1>404</h1><p>Такой страницы нет в сохранённом архиве.</p><p><a href="/">Вернуться на главную</a></p></body></html>""",
+        """<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><title>Страница не найдена</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:12vh 24px;color:#171717}h1{font-size:clamp(40px,8vw,80px)}a{color:#d94f33;font-size:20px}</style></head><body><h1>404</h1><p>Такой страницы нет в сохранённом архиве.</p><p><a href="/">Вернуться на главную</a></p></body></html>""",
         encoding="utf-8",
     )
-    output.joinpath("robots.txt").write_text("User-agent: *\nAllow: /\n", encoding="utf-8")
+    output.joinpath("robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8")
+
+
+def apply_noindex(output: Path) -> int:
+    changed = 0
+    for path in output.rglob("*.html"):
+        document = path.read_text(encoding="utf-8", errors="replace")
+        if ROBOTS_META_RE.search(document):
+            updated = ROBOTS_META_RE.sub(NOINDEX_META, document, count=1)
+        else:
+            updated = re.sub(r"</head>", f"  {NOINDEX_META}\n</head>", document, count=1, flags=re.IGNORECASE)
+        if updated != document:
+            path.write_text(updated, encoding="utf-8")
+            changed += 1
+    return changed
 
 
 def build(output: Path) -> None:
@@ -163,7 +179,8 @@ def build(output: Path) -> None:
     count = build_search_index(output)
     write_search_page(output)
     write_support_files(output)
-    print(f"GitHub Pages demonstration: {count} searchable posts, output={output}")
+    noindex_count = apply_noindex(output)
+    print(f"GitHub Pages demonstration: {count} searchable posts, {noindex_count} noindex pages, output={output}")
 
 
 def main() -> None:
