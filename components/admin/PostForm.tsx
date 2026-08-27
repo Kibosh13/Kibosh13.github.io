@@ -69,7 +69,11 @@ export function PostForm({
               {categories.map((category) => <option key={category.id} value={category.id}>{category.parentSlug ? "— " : ""}{category.name}</option>)}
             </select>
           </div>
-          <div className="cms-field"><label htmlFor="publishedAt">Дата публикации</label><input className="cms-input" id="publishedAt" name="publishedAt" type="datetime-local" defaultValue={dateTimeLocal(post?.publishedAt)} /></div>
+          <div className="cms-field">
+            <label htmlFor="publishedAt">Дата публикации</label>
+            <input className="cms-input" id="publishedAt" name="publishedAt" type="datetime-local" defaultValue={dateTimeLocal(post?.publishedAt)} />
+            <small>По Москве. Если время ещё не наступило, материал на сайте не появится.</small>
+          </div>
           <div className="cms-form-actions"><button className="cms-button" type="submit" disabled={pending}>{pending ? "Сохраняем…" : "Сохранить"}</button></div>
         </section>
         <section className="cms-card cms-card-body cms-form-main">

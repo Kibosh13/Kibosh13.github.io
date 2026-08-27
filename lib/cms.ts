@@ -130,10 +130,23 @@ export function formatRussianDate(value: string | null | undefined) {
   }).format(date);
 }
 
+const MOSCOW_OFFSET = "+03:00";
+
 export function toDateTimeLocal(value: string | null | undefined) {
   if (!value) return "";
   const date = new Date(value);
   if (Number.isNaN(date.valueOf())) return "";
   const offset = date.getTimezoneOffset() * 60_000;
   return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+}
+
+/** Поле datetime-local без пояса: редакторы в Москве, сервер часто UTC. */
+export function parsePublicationDate(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  const naive = trimmed.match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})(?::(\d{2}))?$/);
+  const date = naive
+    ? new Date(`${naive[1]}:${naive[2] || "00"}${MOSCOW_OFFSET}`)
+    : new Date(trimmed);
+  return Number.isNaN(date.valueOf()) ? null : date.toISOString();
 }

@@ -13,6 +13,7 @@ import {
 } from "@/lib/auth";
 import {
   parseExternalLinks,
+  parsePublicationDate,
   sanitizePostHtml,
   slugify,
   type PostStatus,
@@ -274,12 +275,6 @@ export async function changeOwnPasswordAction(
   transaction();
   await createCmsSession(user.id);
   redirect("/admin/profile?changed=1");
-}
-
-function parsePublicationDate(value: string) {
-  if (!value) return null;
-  const date = new Date(value);
-  return Number.isNaN(date.valueOf()) ? null : date.toISOString();
 }
 
 function normalizeMediaUrl(value: string) {
