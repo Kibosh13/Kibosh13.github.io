@@ -3,7 +3,7 @@ Theme Name: Хроники преображения Мира
 Theme URI: https://преображение-мира.рф/
 Author: Хроники преображения Мира
 Description: Самостоятельная тема восстановленного авторского сайта Ирины Ниловой.
-Version: 1.2.0
+Version: 1.3.0
 Text Domain: hroniki-mira
 */
 
@@ -472,6 +472,23 @@ body {
 .source-publication-date { margin: 7px 0 12px; color: #575250; font-size: 16px; line-height: 1.75; }
 .source-publication-excerpt { color: #000; font-size: 18px; line-height: 1.7; }
 .source-home-books { position: relative; }
+.source-home-contact { padding-top: 0; }
+.source-home-contact-card {
+  display: flex;
+  width: min(100%, 840px);
+  margin: 0 auto;
+  padding: 34px 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  border-top: 3px solid var(--orange);
+  border-bottom: 3px solid var(--orange);
+  background: #fff;
+}
+.source-home-contact-card h2 { margin: 0; font-size: 36px; }
+.source-home-contact-details { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 8px 24px; color: #575250; font-size: 18px; }
+.source-home-contact-details a { color: #575250; text-decoration: none; }
+.source-home-contact-details a:hover { color: var(--orange-deep); }
 .source-carousel { position: relative; overflow: hidden; padding-inline: 38px; }
 .source-carousel-track {
   display: grid;
@@ -697,6 +714,9 @@ body {
   .source-book-article .book-detail { grid-template-columns: 1fr; }
   .source-book-cover-column { width: min(100%, 340px); margin-inline: auto; }
   .source-book-article .article-content { font-size: 16px; }
+  .source-home-contact-card { display: block; padding: 28px 22px; text-align: center; }
+  .source-home-contact-card h2 { margin-bottom: 18px; font-size: 30px; }
+  .source-home-contact-details { display: grid; justify-content: center; gap: 10px; font-size: 17px; }
   .source-video-content { padding: 0 0 42px; }
   .source-video-content .video-grid { padding: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .source-video-author { margin-left: 12px; }

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Хроники — управление сайтом
  * Description: Книги, загрузка файлов и настройки сайта «Хроники преображения Мира».
- * Version: 1.2.0
+ * Version: 1.3.0
  * Author: Хроники преображения Мира
  */
 
@@ -272,6 +272,26 @@ function hroniki_register_settings(): void
         'sanitize_callback' => 'sanitize_textarea_field',
         'default' => "адрес vladar53@list.ru\nтел. 8 929 356 12 78",
     ]);
+    register_setting('hroniki_site', 'hroniki_contact_title', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+        'default' => 'Контакты',
+    ]);
+    register_setting('hroniki_site', 'hroniki_contact_name', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+        'default' => 'Александр',
+    ]);
+    register_setting('hroniki_site', 'hroniki_contact_phone', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+        'default' => '8 929 356 12 78',
+    ]);
+    register_setting('hroniki_site', 'hroniki_contact_email', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_email',
+        'default' => 'vladar53@list.ru',
+    ]);
 }
 add_action('admin_init', 'hroniki_register_settings');
 
@@ -344,7 +364,7 @@ function hroniki_render_settings_page(): void
                 </tr>
                 <tr>
                     <th scope="row"><label for="hroniki_home_publications_title">Заголовок публикаций</label></th>
-                    <td><input class="large-text" id="hroniki_home_publications_title" name="hroniki_home_publications_title" value="<?php echo esc_attr((string) get_option('hroniki_home_publications_title')); ?>" placeholder="Публикации «Хроники преображения Мира»"></td>
+                    <td><input class="large-text" id="hroniki_home_publications_title" name="hroniki_home_publications_title" value="<?php echo esc_attr((string) get_option('hroniki_home_publications_title')); ?>" placeholder="Публикации «Вестники Перемен»"></td>
                 </tr>
                 <tr>
                     <th scope="row"><label for="hroniki_home_books_title">Заголовок книг</label></th>
@@ -378,6 +398,22 @@ function hroniki_render_settings_page(): void
                 <tr>
                     <th scope="row"><label for="hroniki_sidebar_text">Текст блока пожертвований</label></th>
                     <td><textarea class="large-text" rows="4" id="hroniki_sidebar_text" name="hroniki_sidebar_text"><?php echo esc_textarea((string) get_option('hroniki_sidebar_text', "адрес vladar53@list.ru\nтел. 8 929 356 12 78")); ?></textarea></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_contact_title">Заголовок контактов на главной</label></th>
+                    <td><input class="large-text" id="hroniki_contact_title" name="hroniki_contact_title" value="<?php echo esc_attr((string) get_option('hroniki_contact_title', 'Контакты')); ?>"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_contact_name">Контактное лицо</label></th>
+                    <td><input class="large-text" id="hroniki_contact_name" name="hroniki_contact_name" value="<?php echo esc_attr((string) get_option('hroniki_contact_name', 'Александр')); ?>"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_contact_phone">Телефон</label></th>
+                    <td><input class="regular-text" id="hroniki_contact_phone" name="hroniki_contact_phone" value="<?php echo esc_attr((string) get_option('hroniki_contact_phone', '8 929 356 12 78')); ?>"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="hroniki_contact_email">Электронная почта</label></th>
+                    <td><input class="regular-text" type="email" id="hroniki_contact_email" name="hroniki_contact_email" value="<?php echo esc_attr((string) get_option('hroniki_contact_email', 'vladar53@list.ru')); ?>"></td>
                 </tr>
             </table>
             <?php submit_button(); ?>

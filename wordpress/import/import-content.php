@@ -29,26 +29,6 @@ function hroniki_import_json(string $path): array
     return $data;
 }
 
-function hroniki_import_branding(string $text): string
-{
-    $separator = '(?:[\s\x{00A0}\-–—]|&nbsp;)+';
-    $patterns = [
-        '~ВЕСТНИКАМИ' . $separator . 'ПЕРЕМЕН~u' => 'ХРОНИКАМИ ПРЕОБРАЖЕНИЯ МИРА',
-        '~ВЕСТНИКАХ' . $separator . 'ПЕРЕМЕН~u' => 'ХРОНИКАХ ПРЕОБРАЖЕНИЯ МИРА',
-        '~ВЕСТНИКОВ' . $separator . 'ПЕРЕМЕН~u' => 'ХРОНИК ПРЕОБРАЖЕНИЯ МИРА',
-        '~ВЕСТНИКАМ' . $separator . 'ПЕРЕМЕН~u' => 'ХРОНИКАМ ПРЕОБРАЖЕНИЯ МИРА',
-        '~ВЕСТНИКИ' . $separator . 'ПЕРЕМЕН~u' => 'ХРОНИКИ ПРЕОБРАЖЕНИЯ МИРА',
-        '~ВЕСТНИК' . $separator . 'ПЕРЕМЕН~u' => 'ХРОНИКИ ПРЕОБРАЖЕНИЯ МИРА',
-        '~Вестниками' . $separator . 'Перемен~iu' => 'Хрониками преображения Мира',
-        '~Вестниках' . $separator . 'Перемен~iu' => 'Хрониках преображения Мира',
-        '~Вестников' . $separator . 'Перемен~iu' => 'Хроник преображения Мира',
-        '~Вестникам' . $separator . 'Перемен~iu' => 'Хроникам преображения Мира',
-        '~Вестники' . $separator . 'Перемен~iu' => 'Хроники преображения Мира',
-        '~Вестник' . $separator . 'Перемен~iu' => 'Хроники преображения Мира',
-    ];
-    return preg_replace(array_keys($patterns), array_values($patterns), $text) ?? $text;
-}
-
 function hroniki_import_localize(string $html, string $old_origin, string $legacy_host): string
 {
     $html = preg_replace(
@@ -72,7 +52,9 @@ function hroniki_import_localize(string $html, string $old_origin, string $legac
         'https://вестники-перемен.рф/' => home_url('/'),
         'http://вестники-перемен.рф/' => home_url('/'),
     ];
-    return hroniki_import_branding(strtr($html, $replacements));
+    // The new brand is the site identity only. Historical material keeps the
+    // original “Вестники Перемен” wording exactly as it was written.
+    return strtr($html, $replacements);
 }
 
 function hroniki_import_term(array $definition, array &$term_ids): int
@@ -219,8 +201,8 @@ $category_defs = [
     ['path' => 'blog', 'name' => 'Блоги', 'slug' => 'blog', 'parent' => null],
     ['path' => 'blog/blog-aleksanra-lipnyagova', 'name' => 'Блог Александра Липнягова', 'slug' => 'blog-aleksanra-lipnyagova', 'parent' => 'blog'],
     ['path' => 'blog/vestniki-peremen-g-krasnoyarsk', 'name' => 'Красноярск', 'slug' => 'vestniki-peremen-g-krasnoyarsk', 'parent' => 'blog'],
-    ['path' => 'blog/vestniki-peremen-g-krasnoyarsk/blog-vestniki-peremen-g-krasnoyarsk', 'name' => '«Хроники преображения Мира» г. Красноярск', 'slug' => 'blog-vestniki-peremen-g-krasnoyarsk', 'parent' => 'blog/vestniki-peremen-g-krasnoyarsk'],
-    ['path' => 'blog/vestniki-peremen-g-chelyabinsk', 'name' => '«Хроники преображения Мира» г. Челябинск', 'slug' => 'vestniki-peremen-g-chelyabinsk', 'parent' => 'blog'],
+    ['path' => 'blog/vestniki-peremen-g-krasnoyarsk/blog-vestniki-peremen-g-krasnoyarsk', 'name' => 'Блог «Вестники Перемен» г. Красноярск', 'slug' => 'blog-vestniki-peremen-g-krasnoyarsk', 'parent' => 'blog/vestniki-peremen-g-krasnoyarsk'],
+    ['path' => 'blog/vestniki-peremen-g-chelyabinsk', 'name' => '«Вестники Перемен» г. Челябинск', 'slug' => 'vestniki-peremen-g-chelyabinsk', 'parent' => 'blog'],
     ['path' => 'blog-derzhava-sveta', 'name' => 'Блог «Держава Света»', 'slug' => 'blog-derzhava-sveta', 'parent' => null],
     ['path' => 'blog-dlya-nachinayushchih', 'name' => 'Блог для начинающих', 'slug' => 'blog-dlya-nachinayushchih', 'parent' => null],
     ['path' => 'book', 'name' => 'Книги', 'slug' => 'book', 'parent' => null],
@@ -361,7 +343,7 @@ foreach ($books as $record) {
     }
 }
 
-$home_default_content = '<p>И.Н. Мы решили зарегистрировать Общественное Движение «Хроники преображения Мира», сделать его официальным и заявить о нём в общественной среде России.</p>'
+$home_default_content = '<p>И.Н. Мы решили зарегистрировать Общественное Движение «Вестники Перемен», сделать его официальным и заявить о нём в общественной среде России.</p>'
     . '<p>Какие напутствия есть для нас со стороны Вышних Светлых Сил в этом деле?</p>'
     . '<p>ММ Мир нуждается в Благой Вести о том, что конца Света не будет, а будет продолжение жизни в совершенно ином качестве, нежели она была в эпохе Рыб, ознаменовавшей себя самыми тёмными временами жизни на Планете. Но теперь Мир Тьмы заканчивает своё существование. Он не имеет возможности преодолеть препятствие трёх измерений, которые в Новой Эпохе накрываются более высокими мерностями, и этим завершают главенство сил Тьмы на поверхности Земли…</p>';
 $home_existing = get_posts([

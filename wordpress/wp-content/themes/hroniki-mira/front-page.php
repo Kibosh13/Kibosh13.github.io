@@ -19,12 +19,16 @@ $home_selected_books = $home_book_ids ? get_posts([
 ]) : [];
 $home_first_image = (string) get_option('hroniki_home_first_image_url') ?: $legacy_uploads . '11211.jpg';
 $home_second_image = (string) get_option('hroniki_home_second_image_url') ?: $legacy_uploads . '11311.jpg';
-$home_second_title = (string) get_option('hroniki_home_second_title') ?: 'О задачах общественного движения «Хроники преображения Мира»';
-$home_second_text = (string) get_option('hroniki_home_second_text') ?: 'И.Н. Мы зарегистрировали движение «Хроники преображения Мира». Что дальше? В чём наша задача? Теперь, задним умом уже становится понятно, что надо было бы указать, каких именно перемен мы желаем, а именно СВЕТЛЫХ! Но мы ведь не указали это в своём названии. Как быть с этим недочётом?';
-$home_publications_title = (string) get_option('hroniki_home_publications_title') ?: 'Публикации «Хроники преображения Мира»';
+$home_second_title = (string) get_option('hroniki_home_second_title') ?: 'О задачах общественного движения «Вестники Перемен»';
+$home_second_text = (string) get_option('hroniki_home_second_text') ?: 'И.Н. Мы зарегистрировали движение «Вестники Перемен». Что дальше? В чём наша задача? Теперь, задним умом уже становится понятно, что надо было бы указать, каких именно перемен мы желаем, а именно СВЕТЛЫХ! Но мы ведь не указали это в своём названии. Как быть с этим недочётом?';
+$home_publications_title = (string) get_option('hroniki_home_publications_title') ?: 'Публикации «Вестники Перемен»';
 $home_books_title = (string) get_option('hroniki_home_books_title') ?: 'Книги Ирины Ниловой';
 $home_video_title = (string) get_option('hroniki_home_video_title') ?: 'Видео';
 $home_video_image = (string) get_option('hroniki_home_video_image_url') ?: $legacy_uploads . 'Screenshot_179.jpg';
+$contact_title = trim((string) get_option('hroniki_contact_title', 'Контакты'));
+$contact_name = trim((string) get_option('hroniki_contact_name', 'Александр'));
+$contact_phone = trim((string) get_option('hroniki_contact_phone', '8 929 356 12 78'));
+$contact_email = sanitize_email((string) get_option('hroniki_contact_email', 'vladar53@list.ru'));
 ?>
 
 <?php while (have_posts()) : the_post(); ?>
@@ -115,5 +119,20 @@ $home_video_image = (string) get_option('hroniki_home_video_image_url') ?: $lega
         <div class="source-home-action"><a class="source-button" href="<?php echo esc_url(home_url('/video/')); ?>">Перейти..</a></div>
     </div>
 </section>
+
+<?php if ($contact_name !== '' || $contact_phone !== '' || $contact_email !== '') : ?>
+    <section class="source-home-section source-home-contact" aria-labelledby="home-contact-title">
+        <div class="wrap">
+            <div class="source-home-contact-card">
+                <?php if ($contact_title !== '') : ?><h2 id="home-contact-title"><?php echo esc_html($contact_title); ?></h2><?php endif; ?>
+                <div class="source-home-contact-details">
+                    <?php if ($contact_name !== '') : ?><strong><?php echo esc_html($contact_name); ?></strong><?php endif; ?>
+                    <?php if ($contact_phone !== '') : ?><a href="<?php echo esc_url('tel:' . preg_replace('/[^0-9+]/', '', $contact_phone)); ?>"><?php echo esc_html($contact_phone); ?></a><?php endif; ?>
+                    <?php if ($contact_email !== '') : ?><a href="<?php echo esc_url('mailto:' . $contact_email); ?>"><?php echo esc_html($contact_email); ?></a><?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </section>
+<?php endif; ?>
 
 <?php get_footer(); ?>
