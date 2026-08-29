@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { parseExternalLinks, sanitizePostHtml, slugify } from "../lib/cms";
+import { parseExternalLinks, parsePublicationDate, sanitizePostHtml, slugify } from "../lib/cms";
 import { hashPassword, verifyPassword } from "../lib/passwords";
 import { detectAllowedUpload } from "../lib/upload-validation";
 
@@ -16,6 +16,13 @@ test("CMS utilities create safe slugs, links and article HTML", () => {
   assert.match(cleaned, /<p>Текст<\/p>/);
   assert.doesNotMatch(cleaned, /script|alert/);
   assert.match(cleaned, /rel="noopener noreferrer"/);
+});
+
+test("datetime-local is stored as Moscow time, not server UTC", () => {
+  assert.equal(parsePublicationDate("2026-08-27T18:08"), "2026-08-27T15:08:00.000Z");
+  assert.equal(parsePublicationDate("2026-08-27T18:08:00"), "2026-08-27T15:08:00.000Z");
+  assert.equal(parsePublicationDate("2026-08-27T14:09:25.000Z"), "2026-08-27T14:09:25.000Z");
+  assert.equal(parsePublicationDate(""), null);
 });
 
 test("password hashes are salted and verifiable", () => {
