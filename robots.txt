@@ -1,2 +1,8 @@
 User-agent: *
 Disallow: /
+
+# forma-201: allow HTML crawling so page-level noindex can be read.
+# Other projects and non-HTML assets keep the existing crawl restriction.
+Allow: /forma-201/$
+Allow: /forma-201/*/$
+Allow: /forma-201/*.html$
