@@ -6,3 +6,8 @@ Disallow: /
 Allow: /forma-201/$
 Allow: /forma-201/*/$
 Allow: /forma-201/*.html$
+
+# rieltor: allow demo HTML crawling so its noindex directives can be read.
+# Images and other projects keep the existing restrictions.
+Allow: /rieltor/$
+Allow: /rieltor/*.html$
